@@ -4,7 +4,7 @@
 
 A delegate in C# is a type, that refers to methods with a specific parameter list and return type. Delegates are used to pass methods as arguments to other methods.
 
-![what is a delegate](adelegate.png)
+![what is a delegate](images/adelegate.png)
 
 The delegate doesn’t care whether the methods are static or not so it will work well with both types.  We can set one or more methods to run with one delegate.
 
@@ -67,7 +67,7 @@ Just like you can add methods to a delegate with the += notation, you can remove
 
 When the methods we are using are returning void we can use the Action type provided by C#. .NET provides a set of Action types, from Action with no arguments, to Action with 16 arguments (Action, Action<T1>, Action <T1, T2>…).  Actions can also be for static and instance methods.
 
-![what is a delegate](actions.png)
+![what is a delegate](images/actions.png)
 
 The parameters used for actions can be anything, and they don’t have to all be the same type.
 
@@ -138,7 +138,7 @@ myFunc = (x, y) => { return ((x + 10 + y).ToString()); };
 
 When you create the Actions as Events in a class, they are created as fields not properties with get and set properties. Also, they are assigned a delegate on creation, so there is no need to check for null before calling it.
 
-![what is a delegate](actionevent.png)
+![what is a delegate](images/actionevent.png)
 
 
 ## If you are going to use events, use EventHandler instead of event Action
@@ -147,7 +147,7 @@ It is better because it allows subscribers to be given data about the event.
 
 If we are using EventHandlers, the methods we can use with them need to have the parameters (Object sender, EventArgs e).
 
-![what is a delegate](eventhandler.png)
+![what is a delegate](images/eventhandler.png)
 
 We will probably need to pass some customized information to the methods, and we can do that by creating a class that inherits from EventArgs.
 
@@ -155,21 +155,21 @@ In this case, the event is created this way:
 
 ` private static event EventHandler<MyEventArgs> RaiseMyEvent=delegate{};` 
 
-![what is a delegate](eventhandler2.png)
+![what is a delegate](images/eventhandler2.png)
 
 ## Dealing With Exceptions
 
 What happens if we have more than one subscriber and we are not handling exceptions?
 
 
-![what is a delegate](exceptions1.png)
+![what is a delegate](images/exceptions1.png)
 
 We could take care of the problem this way:
 
 
-![what is a delegate](exceptions2.png)
+![what is a delegate](images/exceptions2.png)
 
 If we don’t want to have the try-catch blocks in each method, we can also do this:
 
 
-![what is a delegate](delegateexceptions1.png)
+![what is a delegate](images/delegateexceptions1.png)
