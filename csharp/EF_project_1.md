@@ -341,5 +341,305 @@ public IActionResult GetSongs()
 ```
 You can return a string or whatever is appropriate for each specific method.
 
+## Async
+
+Notice that in the above code the methods are not async, which works, but, you can also have async code which will be more efficient.
+
+If we want to have async methods, we need to use the async and await keywords and return `Task or Task<T>`. Let’s look at the methods one at a time. Also need using System.Threading.Tasks;
+
+This
+```
+[HttpGet] //could just name it Get
+public IEnumerable<Song> GetSongs()
+{
+   return _dbContext.Songs;
+}
+```
+Becomes this (also changed the result to IActionResult, not related to the async changes):
+```
+public async Task<IActionResult> GetSongs()
+{
+   return StatusCode(StatusCodes.Status200OK, await _dbContext.Songs.ToListAsync());
+}
+```
+Similarly, the rest of the code will change like this (note that the return type is going to depend on what you want to return, this is just a guide):
+```
+[HttpGet("{id}")] //could just name it Get
+public async Task<Song> GetSong(int id)
+{
+   return await _dbContext.Songs.FindAsync(id);
+}
+
+//add FromBody to let it know that the data we need to add is coming from the body of the request.
+[HttpPost]
+public async Task<IActionResult> PostSong([FromBody] Song song)
+{
+  await _dbContext.Songs.AddAsync(song);
+  await _dbContext.SaveChangesAsync();
+  return StatusCode(StatusCodes.Status201Created);
+}
+
+[HttpPut("{Id}")]
+public async Task<IActionResult> PutSong(int id, [FromBody] Song song)
+{
+   Song s = await _dbContext.Songs.FindAsync(id);
+   s.Title = song.Title;
+   s.Language= song.Language;
+   _dbContext.SaveChanges();
+   return StatusCode(StatusCodes.Status202Accepted);
+}
+
+[HttpDelete("{id}")]
+public async Task<IActionResult> Delete(int id)
+{
+   Song s = await _dbContext.Songs.FindAsync(id);
+   _dbContext.Songs.Remove(s);
+   await  _dbContext.SaveChangesAsync();
+   return StatusCode(StatusCodes.Status200OK);
+}
+```
+Notice there is no RemoveAsync.
+
+## When the Code is not so Simple
+
+The code we have is super short , in part because we are checking for nothing, and also there is no business logic involved. Usually it will not be that way. It is a good idea to have some extra files to handle this. These files would be Repositories and their interfaces. In that case you would have.
+
+![pic.](images/repo1.png)
+
+The interface and its related class will be per table. Each table still has its controller.
+
+An example of one of those classes could be (I thought about removing the part that deals with the _customerMap but, left it and you can ignore, not specific for the concept):
+
+```
+public class CustomerRepository : ICustomerRepository
+{
+   //use to cache customers
+   private static ConcurrentDictionary<string, Customer> _customerMap = new ConcurrentDictionary<string, Customer>();
+   //not static, should not cache
+   private APIDbContext _context;
+
+   public CustomerRepository(APIDbContext injectedContext)
+   {
+      this._context = injectedContext;
+      if (_customerMap is null)
+      {
+         _customerMap = new ConcurrentDictionary<string, Customer>(this._context.Customers.ToDictionary(c => c.CustomerID));
+      }
+   }
+
+   public async Task<Customer> CreateAsync(Customer c)
+   {
+      c.CustomerID = c.CustomerID.ToUpper();
+      EntityEntry<Customer> added = await this._context.AddAsync(c);
+      int affected = await this._context.SaveChangesAsync();
+      if (affected == 1)
+      {
+         if (_customerMap == null)
+         {
+            return c;
+         }
+         else
+         {
+            return _customerMap.AddOrUpdate(c.CustomerID, c, UpdateCache);
+         }
+       }
+       else
+       {
+          return null;
+       }
+   }
+
+   public Task<IEnumerable<Customer>> RetrieveAllAsync()
+   {
+      return Task.FromResult(_customerMap is null ? Enumerable.Empty<Customer>() : _customerMap.Values);
+   }
+              
+   public Task<Customer?> RetrieveAsync(string id)
+   {
+      id = id.ToUpper();
+      if (_customerMap is null) return null!;
+      _customerMap.TryGetValue(id, out Customer? c);
+      return Task.FromResult(c);
+   }
+
+   private Customer UpdateCache(string id, Customer c)
+   {
+      Customer? old;
+      if (_customerMap is not null)
+      {
+         if (_customerMap.TryGetValue(id, out old))
+         {
+            if (_customerMap.TryUpdate(id, c, old))
+            {
+               return c;
+            }
+         }
+      }
+      return null;
+   }
+
+   public async Task<Customer?> UpdateAsync(string id, Customer c)
+   {
+      id = id.ToUpper();
+      c.CustomerID = c.CustomerID.ToUpper();
+      this._context.Update(c);//we did not use Update in the previous ex.
+      int affected = await this._context.SaveChangesAsync();
+      if (affected == 1)
+      {
+         return UpdateCache(id, c);
+      }
+      return null;
+   }
+
+   public async Task<bool?> DeleteAsync(string id)
+   {
+      id = id.ToUpper();
+      Customer? c = this._context.Customers.Find(id);
+      if (c is null) return null;
+      this._context.Remove(c);
+      int affected = await this._context.SaveChangesAsync();
+      if (affected == 1)
+      {
+         if (_customerMap is null) return null;
+         return _customerMap.TryRemove(id, out c);
+      }else
+      {
+         return null;
+      }   
+    }
+ }
+ ```
+ Once you have that, and before you can use it in the controller, you need to go to your program.cs, and like we did for the APIDbContext:
+
+ ```
+ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+ ```
+ Then on the SongController, CustomerController etc:
+ ```
+ ...
+public class CustomerController :ControllerBase
+{
+   private readonly ICustomerRepository repo;
+   public CustomerController(ICustomerRepository repo)
+   {
+      this.repo = repo;
+   }
+
+    [HttpGet]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<Customer>))]
+    public async Task<IEnumerable<Customer>> GetCustomers(string country)
+    {
+       if (string.IsNullOrEmpty(country) || string.IsNullOrWhiteSpace(country))
+       {
+          return await repo.RetrieveAllAsync();
+       }            
+       else 
+       {
+          return (await repo.RetrieveAllAsync()).Where( c => c.Country == country);
+       }
+     }
+...
+```
+## When you need more than one Get (or any other action)
+
+If you have two HttpGet methods, you will get an error because the code doesn’t know which one to use. You need to create the second method so it has a different route to it.
+
+You would have this one:
+```
+[HttpGet("{id}")] //could just name it Get
+public async Task<Song> GetSong(int id)
+{
+   return await _dbContext.Songs.FindAsync(id);
+}
+```
+And you could now add something like this:
+
+```
+[HttpGet("[action]/{id}")]
+public async Task<Song> GetSomeOtherName(int id)
+{
+   return await _dbContext.Songs.FindAsync(id);
+}
+```
+
+And the url to it would be: 
+```
+localhostOrWhateverServer/api/songs/GetSomeOtherName/1
+```
+/api because that is what the controller had set up `([Route(“api/[controller]”)`].
+
+## Linq with EF
+
+You can use linq when getting data with EF. I’m just going to cover a few examples.
+
+```
+//get only the songs that have id>4 and don't get all cols, just id and lang
+public async Task<IActionResult> GetSongs()
+  {
+   var myList = await (from s in _dbContext.Songs
+       where s.Id > 4
+       select new
+       {
+        id = s.Id,
+        lang = s.Language
+       }).ToListAsync();                      
+       
+   return StatusCode(StatusCodes.Status200OK, myList);
+  }
+  ```
+  The result is:
+
+  ```
+  [
+    {
+        "id": 5,
+        "lang": "Russian"
+    },
+    {
+        "id": 6,
+        "lang": "Portuguese"
+    },
+    {
+        "id": 7,
+        "lang": "Valencian"
+    },
+    {
+        "id": 8,
+        "lang": "Arabic"
+    }
+]
+```
+If you have the Songs, and you also have a table that links each song to a list of countries where the song exists, you can get those countries when you get the song, with code similar to the one below.
+
+Keep in mind that to be able to have the songs with their countries you will need code like this:
+
+In your DbContext class, in addion to the Songs DbSet, you will need the countries one. It should match the table name:
+`public DbSet<SongAndCountry> SongAndCountries { get; set; }`
+
+In the Song.cs itself,  `public ICollection<SongAndCountry> SongAndCountries { get; set; }`
+
+Then in the SongController.cs you could get the songs with a certain id and their respective countries with something like this:
+
+```
+var myList = await (_dbContext.Songs.Where(s => s.Id == 3).Include(c => c.SongAndCountries).ToListAsync());
+```
+Similar to the above, but with one more filter, you could do:
+
+```
+IQueryable<Category>? categories = db.Categories?.Include(c => c.Products.Where(p => p.cost < 50));
+
+IQueryable<Product>? products = db.Products?.Where(p => EF.Functions.Like(p.ProductName, "Ch%"));
+```
+## Paging Algorithm
+
+Say we want the user to be able to tell us what page he/she wants, and how many records per page (this is for when we don’t want to send all the records at the same time).
+
+We can take a pgNum and a pgSize (like 10 records per page), and then we would send back the corresponding records with
+
+`Songs.Skip( (pgNum -1) * pgSize).Take(pgSize)`
+
+
+
+
 
 
