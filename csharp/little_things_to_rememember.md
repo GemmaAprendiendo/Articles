@@ -267,6 +267,11 @@ public class Test{;
 }
 ```
 
+## Arrays
+```
+int[] intarray = { 1, 2, 3, 4, 5 };
+string[] result = intarray.Select(x=>x.ToString()).ToArray();
+```
 
 
 
