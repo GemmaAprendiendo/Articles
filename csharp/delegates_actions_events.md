@@ -73,7 +73,7 @@ The parameters used for actions can be anything, and they don’t have to all be
 
 **When you create Action delegates in a class (I have it inside the method in my example), they are created as properties with set and get methods, so it’s possible for code outside the class to access them. You can add the event keyword to them and then they are created as fields instead of properties.**
 
-## Update Func<>
+## Func<>
 
 similar to the Actions, you also have Funcs. Actions are used for when the methods return void, while with Funcs you will have a return value.  If you do this, the last one wins:
 
