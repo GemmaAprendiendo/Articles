@@ -118,3 +118,20 @@ Because I think this can get confusing, I changed the above code to work with a 
 
 ![what is a delegate](images/ienumerator6.png)
 
+## C# 8 Default Interface Implementations
+
+With c# 8 you can have a method in an interface with a default implementation. To do that just add the method to the interface but give it an implementation.
+
+## C# 11 changes
+
+Support has been added for static abstract members. Static memebers cannot use "this", so instead they will use "TSelf".
+
+```
+public interface IMe<TSelf> where TSelf : IMe<TSelf>
+{
+   public static abstract TSelf operator +(TSelf a, TSelf b);
+   public static abstract TSelf SomeProp { get; }
+}
+```
+
+Now we can create a class that implements that interface (use the ClassName in please of the TSelf).
