@@ -132,6 +132,8 @@ public class Program
 }
 ```
 
+https://dotnetfiddle.net/Lcwn9o
+
 ## params argument
 
 ```
@@ -186,6 +188,8 @@ public class Program
 	
 }
 ```
+
+https://dotnetfiddle.net/twbxEH
 
 ## Index Type
 
