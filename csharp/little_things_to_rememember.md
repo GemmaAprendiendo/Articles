@@ -18,29 +18,28 @@ private protected: Accesible inside the type, and any inherited type that is IN 
 
 ```
 class Program {
-                 static void Main(string[] args) {
-                           string theString = "hello";
-                           string theOtherString = null;
-                           Console.WriteLine(theString ?? "Just Me"); //hello
-                           Console.WriteLine(theOtherString ?? "Just Me");//Just Me
-                      }
-                }
+   static void Main(string[] args) {
+      string theString = "hello";
+      string theOtherString = null;
+      Console.WriteLine(theString ?? "Just Me"); //hello
+      Console.WriteLine(theOtherString ?? "Just Me");//Just Me
+   }
+}
 ```
 ## operator overloading
 
 ```
 
-      ...
-                public static SomeObj operator +(SomeObj o1, SomeObj o2)
-                {
-                  SomeObj newO = new SomeObj("");
-                   newO.TheThing = o1.TheThing + "-" + o2.TheThing;
-                   return newO;
-                }
-                //to use 
-                SomeObj obj1 = new SomeObj("hey");
-                SomeObj obj2 = new SomeObj("helloooo");
-                Console.WriteLine( (obj1 + obj2).TheThing);
+public static SomeObj operator +(SomeObj o1, SomeObj o2)
+{
+   SomeObj newO = new SomeObj("");
+   newO.TheThing = o1.TheThing + "-" + o2.TheThing;
+   return newO;
+}
+//to use 
+SomeObj obj1 = new SomeObj("hey");
+SomeObj obj2 = new SomeObj("helloooo");
+Console.WriteLine( (obj1 + obj2).TheThing);
 
 ```
 ## Ignore/use special chars
@@ -57,29 +56,29 @@ Console.WriteLine("c:\\totals"); // prints c:\totals
 
 ## format strings with variables
 ```
-               string fillIt = "Michael";
-                Console.WriteLine($"My name is {fillIt}");
-                //the one below uses C so it will print with currency format:
-                decimal amount = 8.94m;
-                Console.WriteLine($"My amount is {amount:C}");//My amount is $8.94
+string fillIt = "Michael";
+Console.WriteLine($"My name is {fillIt}");
+//the one below uses C so it will print with currency format:
+decimal amount = 8.94m;
+Console.WriteLine($"My amount is {amount:C}");//My amount is $8.94
 
-                int i = 10;
-                int j = 20;
+int i = 10;
+int j = 20;
 
-                Console.WriteLine( format: "Number i is {0} and number 2 is {1}", 	i,j);
-                //prints Number i is 10 and number 2 is 20
+Console.WriteLine( format: "Number i is {0} and number 2 is {1}", 	i,j);
+//prints Number i is 10 and number 2 is 20
 
-                private const string _name = "Michael";
-                private const string _lname = "Jackson";
-                private const string _fullName =  $"{_name}{_lname}"; // in console it would be Michael Jackson.
+private const string _name = "Michael";
+private const string _lname = "Jackson";
+private const string _fullName =  $"{_name}{_lname}"; // in console it would be Michael Jackson.
 
-                Console.WriteLine(String.Format("The current price is {0} per ounce.", 100));
+Console.WriteLine(String.Format("The current price is {0} per ounce.", 100));
 
-                //the -10 and the 6 indicate the alignment of the argument.
-                //hardcoding the values here, instead of using variables for simplicity
-                Console.WriteLine(   format: "{0,-10} {1,6}",   arg0: "Name",   arg1: "Count");
-                Console.WriteLine(  format: "{0, -10} {1, 6:N0}",    arg0: "Bananas",    arg1: 5);
-                Console.WriteLine(  format: "{0, -10} {1, 6:N0}",   arg0: "Apples",   arg1: 12);
+//the -10 and the 6 indicate the alignment of the argument.
+//hardcoding the values here, instead of using variables for simplicity
+Console.WriteLine(   format: "{0,-10} {1,6}",   arg0: "Name",   arg1: "Count");
+Console.WriteLine(  format: "{0, -10} {1, 6:N0}",    arg0: "Bananas",    arg1: 5);
+Console.WriteLine(  format: "{0, -10} {1, 6:N0}",   arg0: "Apples",   arg1: 12);
 ```
 ## Numbers
 
@@ -273,7 +272,59 @@ int[] intarray = { 1, 2, 3, 4, 5 };
 string[] result = intarray.Select(x=>x.ToString()).ToArray();
 ```
 
+## Enums
 
+```
+public enum SomeEnum{
+   first,
+   second,
+   third
+}
+```
+
+```
+public enum SomeEnum{
+   first = 11,
+   second = 12,
+   third = 13
+}
+
+SomeEnum e = SomeEnum.first;
+Console.WriteLine((int)e); // will print 11.
+```
+
+```
+ [System.Flags]
+public enum SomeBinaryEnum:Byte{
+   one = 0b0001,//1
+   two = 0b0010,//2
+   three = 0b0011//3
+}
+
+static void Main(string[] args) {
+   SomeBinaryEnum e = SomeBinaryEnum.one;
+   Console.WriteLine((Byte)e); //prints 1
+   Console.WriteLine(e);  //prints One
+}
+```
+But on the above enum, one and two together will give the same as 3, so if we want to use flags, we should choose values that don't overlap:
+
+```
+[System.Flags]
+public enum SomeBinaryEnum:Byte{
+   one = 0b0001,
+   two = 0b0010,
+   four = 0b0100
+}
+
+SomeBinaryEnum e = SomeBinaryEnum.one |   SomeBinaryEnum.two; //values 0b0001 and 0b0010 , or 0b0011 (3)
+Console.WriteLine((Byte)e); // prints 3
+Console.WriteLine(e); //prints one, two.
+```
+
+## function inside function
+
+You can have a method and have a local function inside that method (starting with C#7). That local function can be accessed only from within that method. It could be something like int whateverMethod() function {... }
 
 
 
