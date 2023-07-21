@@ -400,3 +400,22 @@ DECLARE @name VARCHAR(50) -- database name
 
 Create a temp table by creating a table but naming it with #YourTableName. Use ## if you want it to be available from all sessions.
 
+## DECODE
+
+allows you to add procedure if-then-else logic to queries
+
+`SELECT DECODE(1,1,'SAME');`
+
+compares 1 to 1 and if they are the same returns SAME.  If they were not equal, it would return null.
+
+If you also need code for the else you would `SELECT DECODE(1,2, 'SAME', 'NOT THE SAME');`
+
+You can also have an if elseif with a list or arguments:
+
+`SELECT DECODE (2, 1, 'same as 1', 2, 'same as 2');`
+
+`SELECT DECODE(3,1, 'same as 1,', 2, 'same as 2', 'not same as anything');`
+
+
+
+
