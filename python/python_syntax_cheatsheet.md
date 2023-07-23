@@ -1,4 +1,4 @@
-# Python Syntax Cheatsheet
+# Python Syntax Cheatsheet (basic)
 
 `print("...");`
 
@@ -86,5 +86,55 @@ else:
 
 #use or for and or
 ```
+
+to import something, such as the random module `import random`, then use its functions with `random.whateverfunc`
+
+For the modules, we can just name the file and import that directly, and use the things it has inside.
+
+`random() ` --> 0 to 0.9999 float number
+`ranint(1,10) ` --> 1 to 10
+
+```
+someArray = ["one", "two", "three", "four", "five"];
+print(someArray[0]); #one
+print(someArray[-1]) #five
+```
+
+```
+someArray.append("six");
+print(someArray);
+```
+
+`someArray.extend(["seve", "eight"])`
+
+```
+str = "hello how are you?"
+
+array = str.split(" ");
+print(array)
+```
+
+```
+import random;
+
+array = ["Anna","George", "Michael", "Maria"]
+
+randomname = random.choice(array);
+print(randomname)
+```
+
+```
+array = [1,2,3,4,5]
+array2 = [6,7,8,9,0]
+
+both = [array, array2]
+print(both) # prints [[1, 2, 3, 4, 5], [6, 7, 8, 9, 0]]
+
+print(both[0]) # prints [1, 2, 3, 4, 5]
+
+print(both[0][2]) # prints 3
+```
+
+
 
 

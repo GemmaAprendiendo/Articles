@@ -464,16 +464,598 @@ export default Hello
 
 ```
 
+## Events in React. 
+
+Events are similar to how they are done in regular HTML. 
+
+### Setting onClick to the handler 
+
+With regular HTML you would do this: `onclick="activateLasers()"`, but with React you will do this: ` onClick={this.activateLasers} `
+
+Notice that you do not include the ().  You can do it (not for functions that will update state though), but the function will be called when the component loads so you need to keep that in mind.   
+
+### Prevent default behavior 
+
+With HTML you can just use “return false” to prevent the default behavior of an element. 
+With React, you need to call preventDefault yourself. 
+
+```
+<a href="http://goingNowhere" onClick={this.linkDoNothing}>link to nowhere</a
+>   linkDoNothing = (e) => { 
+    e.preventDefault(); 
+  } 
+```
+When you click the above link in the browser nothing will happen. 
+Remember that if you do not use arrow functions in the file (class fields syntax) you will have to bind the functions on the constructor.  Otherwise, you will get undefined errors.  You can also use the arrow functions in the callback to avoid having to bind (OK in most cases but may affect performance): 
+
+`onClick={() => this.handleClick()} `
+
+### passing arguments 
+
+If you need to pass arguments to the handler function, use this form so you do not end up calling it on load: 
+
+`onChange = { () => this.checkedLetter("M")} `
+
+## Advanced Concepts 
+
+### Context 
+
+Props are used to pass data around between components, but some things are going to be used but a lot of components in the app (like a configuration value) and passing them all over the place with props can get to be a lot.  Context is another way to approach that situation. 
+
+```
+import React, { Component } from 'react'; 
+import { render } from 'react-dom'; import Hello from './Hello'; 
+ 
+const MyContext = React.createContext(); 
+class App extends Component {   
+    constructor() 
+    {    
+         super();    
+    }   
+    render() {     
+        return ( 
+            <MyContext.Provider value="hey">               
+                <Hello name="Willie" lastName="Wilson"/>                     
+            </MyContext.Provider>       
+        ); 
+    } 
+} 
+export {MyContext} 
+
+render(<App />, document.getElementById('root')); 
+
+```
+Hello.js has not changed and it’s still using props: 
+
+```
+import React , {Component} from 'react'; 
+import HelloSub from './HelloSub'; 
+
+class Hello extends Component
+{   
+    constructor(props)
+    {     
+        super(props); 
+    }   
+    render(){     
+        return(  
+            <React.Fragment> 
+                <h1>Helloooo {this.props.name}!</h1>      
+                <HelloSub/>                
+            </React.Fragment> 
+        ) 
+    }     
+} 
+export default Hello 
+
+```
+
+HelloSub makes use of the context. 
+
+```
+import React , {Component} from 'react'; 
+import {MyContext} from './index'; 
+ 
+ class HelloSub extends Component{   
+    constructor(props){     
+        super(props); 
+    } 
+
+  render(){             
+    return(  
+      <MyContext.Consumer> 
+        {context => ( 
+          <React.Fragment>         
+            <h1>Helloooo! I'm the sub and the SomeContext is {context}</h1>                       
+          </React.Fragment>         )} 
+      </MyContext.Consumer> 
+    ) 
+  }     
+} 
+export default HelloSub 
+
+```
 
 
+### Error Boundaries 
+
+Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed.  They catch errors during rendering, but they do not catch all kinds of errors (server side, event handlers, async code). 
+You create an Error Boundary by creating a class that has methods static getDerivedStateFromError() and/or componentDidCatch(). 
 
 
+Create the class for the error boundary component and as the state keep the possible error messages.  Then in the render, check the state and display the error or if no errors, just render the children (since you will use this component to wrap other components, those will be the children). 
+
+```
+class ErrorBoundary extends React.Component {     
+    constructor(props) {       
+        super(props); 
+        this.state = { error: null, errorInfo: null }; 
+    } 
+
+    componentDidCatch(error, errorInfo) {           
+        this.setState({         
+            error: error,         
+            errorInfo: errorInfo 
+      })     
+    }  
+
+    render() { 
+      if (this.state.errorInfo) {               
+        return ( 
+          <div> 
+            <h2>Something went wrong.</h2>           
+            {this.state.error && this.state.error.toString()}             <br /> 
+            {this.state.errorInfo.componentStack}           
+          </div> 
+        ); 
+      } 
+      // if there were no errors       return this.props.children; 
+    }   
+  } 
+
+```
+
+Then you will use it like a regular component.  It will use of the errors thrown on the children component.  If the ErrorBoundary component itself has an error it will be propagated up. 
+
+```
+<ErrorBoundary> 
+    Some components here 
+</ErrorBoundary> 
+
+```
+For errors in event handlers etc, just use the regular JS try catch. 
+
+### Refs and Forwarding refs 
+
+#### React.createRef() 
+
+With refs you can access an element of your component directly.  Easier to understand with an example. 
+You have a canvas element in your component and you set ref to a variable in your code: 
+
+`<canvas style ={canvasStyle} ref={this.refToCanvas}       />    `
+
+Note that you use {}, not a string. 
+Your variable is set in the constructor: 
 
 
+```
+constructor(props) {        
+  	super(props);               
+    this.refToCanvas = React.createRef();                  
+} 
+
+```
+Now you can access that element directly in your code.  Speaking of canvas, I do this so the points where you touch are accurate.
+
+`this.refToCanvas.current.width = this.refToCanvas.current.clientWidth; `
+
+Note how you access the element by using the this.refToCanvas.current. 
+You can use the refs in HTML elements and class components, but not on functions. 
+
+#### Callback Refs 
+
+You can accomplish the same thing as above by using callback refs.  Again easier with an example: 
+
+![React callback refs ](./images/react1.png)
+
+same thing, just for copy paste:
+```
+import React from 'react'; 
+ 
+class Hello extends React.Component {   
+    constructor(props) {    
+         super(props); 
+        this.textInput = null; 
+ 
+        this.setTextInputRef = element => {      
+             this.textInput = element; 
+    };  
+
+    this.alertTextInput = () => {             
+        if (this.textInput)  
+            alert(this.textInput.value); 
+    }; 
+  }    
+  
+  render() {         
+    return (       
+        <div>         
+            <input   
+                type="text"  
+                value="my Value" 
+                ref={this.setTextInputRef} 
+        />         
+        <input           
+            type="button"          
+             value="Alert" 
+            onClick={this.alertTextInput} 
+        /> 
+      </div> 
+    ); 
+  } } 
+export default Hello; 
+
+```
+
+#### This.refs – Should be refactored 
+
+React also has a this.refs but it is not recommended and is obsolete (used a string in the element, not the {}). 
+Here are some hints if you decide to refactor your this.refs to using React.createRef: 
+In the constructor: 
+
+![don't use ](./images/react2.png)
+Accessing: 
+
+![don't use ](./images/react3.png)
+In the element: 
+![don't use ](./images/react4.png)
+
+#### Forwarding Refs 
+
+This allows us to pass refs though a component to its children.  This only works when the component that receives the red is created with React.forwardRef. 
+Create the component with forwardRef: 
+
+```
+const ButtonThatGetsARef = React.forwardRef((props, ref) => ( 
+    <button ref={ref}> 
+  Something here 
+    </button> 
+  )); 
+
+```
+
+Create the ref that will be passed to the component that takes the ref.  This way the 
+component using ButtonThatGetsARef can access the `<button/>` inside ButtonThatGetsARef from the ref: 
+
+```
+const ref = React.createRef(); 
+< ButtonThatGetsARef ref={ref}>Click me!</ ButtonThatGetsARef >; 
+
+```
+
+#### useRef 
+
+This is a React hook and will be covered later. 
+
+### HOC – Higher Order Component 
+
+With this we take advantage of an existing component to create a new one which has things in common with the first one (this is not inheritance per se though it has some of its benefits).  Do not do this in the render method.  The new component will not have any of the static methods from the original component.  Props will be passed to the new component but refs will not. 
+ 
+A higher-order component is a function that takes a component and returns a new component.  It is not part of the React API. 
+This has been very confusing to me for whatever reason so taking it one step at a time with the examples: 
 
 
+![HOC 1 ](./images/hoc1.png)
+
+The component used only displays a “hey” and the function used to create the HOC version only has a console statement in the componentDidMount method.  
+The file only exports the HOC component: 
+
+![HOC 2 ](./images/hoc2.png)
+
+We will get the hi in the console and the hey in the browser. 
+
+Changing it a bit so we log the props passed to the component instead of just “hi”. 
+
+![HOC 3 ](./images/hoc3.png)
+
+We can use the props in the original component if we pass them in the function.  If index is still using the HOC : 
+
+![HOC 4 ](./images/hoc4.png)
+
+![HOC 5 ](./images/hoc5.png)
+
+Besides the props, we can pass additional props this way 
+
+![HOC 6 ](./images/hoc6.png)
+
+The function that creates a new component from the original component can also take other arguments and use them to do whatever in the code, then pass whatever results like we did with dataAdd=”Something else here”. 
+Pasting only the code form of the last example since that is the one that includes the previous ones. 
+
+```
+import React, { Component } from 'react'; 
+import { render } from 'react-dom'; import CompFromHOC from './Hello'; 
+ 
+class App extends Component {   
+    constructor() { 
+        super();     
+        this.state = {       
+            name: 'React' 
+        };   
+    }   
+    render() {     
+        return ( 
+        <div> 
+            Components bellow:   
+            < CompFromHOC arg1="I am arg1"/>      
+        </div> 
+         ); 
+    } 
+} 
+
+render(<App />, document.getElementById('root')); 
+
+```
+
+```
+import React from "react"; 
+ 
+class Component extends React.Component {   
+    constructor() {     
+        super(); 
+    }   
+    
+    render() {     
+        return (               
+            <React.Fragment> 
+                <h2>hey</h2>    
+                <h1>{this.props.arg1}</h1> 
+                <h1>{this.props.dataAdd}</h1> 
+            </React.Fragment> 
+        ); 
+    } 
+} 
+
+function createNewComponent(WrappedComp) {   
+    class NewComp extends React.Component {     
+        constructor() {       
+            super();       
+        } 
+    componentDidMount(){      
+         console.log("hi"); 
+        console.log(this.props.arg1); 
+    }      
+    render() {        
+        return ( 
+            <WrappedComp  {...this.props} dataAdd="Something else here"/> 
+      ) 
+    }       } 
+  return NewComp; 
+} 
+
+const CompFromHOC = createNewComponent(Component); export default CompFromHOC ; 
+
+```
+
+### Render Props 
+
+It is a technique used to share code between React components.  It is done though the use of a prop with a function value. 
+A component with a render prop passed to it will take a function which will return a React element.  It will call this function instead of implementing its own logic. 
+
+![render propr ](./images/renderprops.png)
+
+```
+import React, { Component } from 'react'; 
+class Cat extends React.Component {   
+    render() { 
+        const mouse = this.props.mouse; 
+        return ( 
+        <span style={{ position: 'absolute', left: mouse.x, top: mouse.y }}>###
+        </span> 
+    ); 
+  } 
+} 
+
+class Mouse extends React.Component {   
+    constructor(props) {     
+        super(props); 
+        this.handleMouseMove = this.handleMouseMove.bind(this);     
+        this.state = { x: 0, y: 0 }; 
+    } 
+
+    handleMouseMove(event) {     
+        this.setState({       
+            x: event.clientX,       
+            y: event.clientY 
+        });   
+    }   
+    render() {     
+        return ( 
+            <div style={{ height: '100vh' }} onMouseMove={this.handleMouseMove}>        
+                {this.props.renderProp(this.state)} 
+            </div> 
+        ); 
+    } 
+} 
+
+class MouseTracker extends React.Component {   render() {     return ( 
+      <div> 
+        <h1>Move the mouse around!</h1> 
+        <Mouse renderProp= {arg => ( <Cat mouse={arg} />)}/> 
+      </div> 
+    ); 
+  } } 
+export default MouseTracker; 
+
+```
+
+### Routing 
+
+You need to install a package to use React routing.  There are three packages that you have available: 
+React-router has the core components and we don’t install it directly, it will get there with any of the other two packages. 
+React-router-dom for web apps React-router-native for mobile. 
+Install the one you need with “npm install” and the package name. 
+ 
+The react-router library has various components, the most common ones being: 
+BrowserRouter: It uses the HTML5 history API (pushState, replaceState and the popstate event) to keep your UI in sync with the URL. It is the parent component that is used to store all the other components. 
+Route: Route is the conditionally shown component that renders some UI when its path matches the current URL. 
+Link: Link component is used to create links to different routes and implement navigation around the application.  Similar to <a href…> 
+Switch: Switch component is used to render only the first route that matches the location rather than rendering all matching routes.  
+ 
+This is how you would import some of those components: 
+
+`import {Route, BrowserRouter as Router, Switch} from 'react-router-dom'; `
 
 
+In you index.js file you can have a const with the routing options and then use that on the render. 
+At the end of the index.js: 
+
+```
+ReactDOM.render(                    
+    routing ,       
+    document.getElementById('root')); 
+
+```
+The routing above is created with route options like these: 
 
 
+![routing ](./images/routing.png)
+
+In the above screenshot, when the path indicated is the browser’s url, the corresponding component will be displayed. 
+If you want to include the navigation bar on all the pages, include the navigation component before the Router as above. 
+The above code provides routes to pages in the application (main components) but note that as of right now this will not work on github pages. 
+You may also want to use links in your pages.  This is how. 
+
+`import {Link} from 'react-router-dom'; `
+
+```
+Link to= {path + "/bdpq"}>                                                    <!—other things you may need here, such as the text for the link→  /Link> 
+```
+
+
+Notice that link will work like an anchor tag (`<a href`) and notice that the above path is the same as it was used in one of the ROUTE components.  One is a link, the other one will take you to the right place from the url in the browser. 
+
+## Hooks
+
+Like I mentioned, you can use functions or classes to create React components, but classes come with more functionality.  Hooks is React way to provide some of that functionality to functions. 
+React says they are not planning on replacing classes with hooks, and it is OK to just start using hooks in new code, leaving existing code the way it is. 
+Hooks are mainly used to deal with state and effect.  You can also create your own custom hooks.   There are other less used React hooks so check the documentation for those. 
+Hooks are JavaScript functions but they have a few rules: call them at top level (not inside code blocks), call them only from React functions. 
+
+
+### State Hook 
+
+This is the same example as both a class using state and a function using the hook for state (handling initial state): 
+
+![hook 1 ](./images/hook1.png)
+
+Notice that for the hook you need to import it (useState). 
+When we need to change the state: 
+
+
+![hook 2 ](./images/hook2.png)
+
+You can have multiple variables created by useState on the same function.
+
+### Effect Hook 
+
+The effect hook lets you perform side effects in function components.  This hook takes the job of componentDidMount and componentDidUpdate since it will happen after the component is rendered (or re-rendered). 
+As before, here is the same example with both using a class and using a function.  
+Note that we now must import useEffect. 
+
+
+![hook 3 ](./images/hook2.png)
+
+It seems weird that React will still the useEffect that only refers to a variable that has not changed.  To change that pass an array with the variables to skip if unchanged as a second argument: 
+
+`useEffect( () => {alert(drink);}, [drink]); `
+
+If there are multiple elements in the array passed as the argument, useEffect will be called when at least one changed. 
+
+## Some Additional Notes
+
+### Functions in React components 
+
+Most of the time, when creating functions in React components we will be using the arrow function format: 
+
+```
+onClick = { (e) => this.deleteRow(id,e)}... 
+sendTheTextBlank = () => {     
+    //something to do  
+} 
+
+```
+If we use regular functions we need to remember to bind them or we will run into problems.  You can do that in the constructor. 
+
+`this.handleSomething = this.handleSomething.bind(this); `
+
+The reason for this is that arrow functions do not their own “this” so there is no confusion about what “this” we are referring to inside the function.  
+
+### github pages with .env 
+
+If you have not done so, install the github pages package (inside your app folder or with the -g option for all): 
+
+`npm install gh-pages — save-dev `
+
+In the package.json of your app, add this: 
+
+```
+"name": "yourreponame", 
+  "version": "0.1.0", 
+  "private": true, 
+  
+  	"homepage": ".",
+ 
+{ 
+
+```
+Some articles say to include the github repo where the page will be hosted (https://{username}.github.io/{repo-name}), but then it will not work when you run locally.  Instead, set it that way and use a .env file. 
+You also need to modify the package.json here: 
+
+
+```
+"scripts": { 
+    "start": "react-scripts start", 
+    "build": "react-scripts build",     "test": "react-scripts test", 
+    "eject": "react-scripts eject", 
+    "deploy": "gh-pages -d build"
+  }, 
+
+```
+Optionally you can also add a predeploy so you don’t have to run the build manually before you deploy it.  I prefer to just build and deploy manually.  You would add this to the scripts section of the package.json. 
+
+`“predeploy”: “npm run build” `
+
+Create a file .env and put it in the root directory of your app (same leve as the src folder).  This is what will allow you to have the homepage set to “.” On your package.json so you don’t have to be changing it to run locally.  You will still have to remember to change this file but personally I find this more organized. 
+
+You can use this file to set environment variables that you can use in your app’s code: 
+
+![env file ](./images/env.png)
+
+Now wherever you need to use paths in your code, you can do this: 
+
+```
+const path = process.env.REACT_APP_FOR_PATH; …. 
+ 
+<img src= {path +"/images/YourImage.png" 
+```
+
+You can name the variables anything you want, but they must start with 
+REACT_APP 
+ 
+Remember to change the variable to what you need before you build and before you run locally. 
+
+Npm start → remember to set the .env file to  
+
+`REACT_APP_FOR_PATH = `
+
+To deploy to github pages → .env set to your github repo. 
+
+```
+npm run build 
+npm run deploy 
+```
+
+There is also this article I wrote, because the routing and the env file were pretty confusing:
+
+https://gmfuster.medium.com/deploying-a-react-app-to-github-pages-24c3e5485589
 
