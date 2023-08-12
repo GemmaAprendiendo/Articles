@@ -135,6 +135,26 @@ print(both[0]) # prints [1, 2, 3, 4, 5]
 print(both[0][2]) # prints 3
 ```
 
+```
+fruits = ["apple", "manzana", "fresa"]
 
+for fruit in fruits:
+    print(fruit)
+```
+In the for, everything indented will be part of the loop (no {} needed, but make sure the indentation is right)
+
+```
+scores = [6,6, 10,8]
+
+print(max(scores)) #10
+```
+```
+for number in range(1, 15):
+    print(number) #prints 1 through 14
+
+#range with stepping
+for number in range(1, 15, 2):
+    print(number) #prints 1 3 5 7 9 11 13
+```
 
 
