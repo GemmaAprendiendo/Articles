@@ -157,4 +157,13 @@ for number in range(1, 15, 2):
     print(number) #prints 1 3 5 7 9 11 13
 ```
 
+```
+def myFunc():
+    print("I")
+    print("am")
+    print("function")
+
+myFunc()
+```
+
 
