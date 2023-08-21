@@ -165,5 +165,25 @@ def myFunc():
 
 myFunc()
 ```
+```
+number = 0
+while number < 10:
+    print(number)
+    number = number+1
+```
 
+```
+def myFunc(name):
+    print(name)
+    print(f"the name is {name}")
+
+myFunc("Jay")
+
+def myFunc(name, lastName):
+    print(f"the name is {name}")
+    print(f"the last name is {lastName}")
+
+myFunc("Jay", "Smith")
+myFunc( lastName="Smith", name="Jayleen")
+```
 
