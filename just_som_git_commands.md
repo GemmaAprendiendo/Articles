@@ -224,3 +224,6 @@ git pull origin remotebranch pull from that to the branch where you are when you
 
 git pull short way to get the latest from the equivalent branch in remote, you are already on that branch locally.
 ```
+
+
+[fixing merge conflicts](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line)
