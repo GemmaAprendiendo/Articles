@@ -1,4 +1,4 @@
-#Just Some Git Commands
+# Just Some Git Commands
 
 ```
 Working Directory (folder on your computer) 
