@@ -186,4 +186,56 @@ def myFunc(name, lastName):
 myFunc("Jay", "Smith")
 myFunc( lastName="Smith", name="Jayleen")
 ```
+Take a range from an array/list
+
+```
+
+array = [1,2,3,4,5]
+
+print(array[1:3])
+
+#print [2, 3]
+
+```
+
+Go all the way to the end but skip every second one
+
+```
+array = [1,2,3,4,5,6,7,8,9]
+
+print(array[1::2])
+
+#[2, 4, 6, 8]
+```
+
+unpacking a list
+```
+a,b,c = [1,2,3]
+
+print(a)#prints 1
+
+a,*b = [1,2,3]
+
+print(b)#prints 2,3
+
+a,*b, c = [1,2,3,4,5]
+
+print(c)#prints 5
+
+
+```
+
+Set - unordered collection of unique objects
+
+`mySet = {1,2,3,4,5}`
+
+ternary operator
+
+```
+#return this string if this condition, else return this other string
+
+message = "0>1" if (0>1) else "1>0"
+print (message)
+#prints 1>0
+```
 

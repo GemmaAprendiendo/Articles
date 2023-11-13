@@ -1,8 +1,10 @@
+
 # Linq
 
 ## General
 
 Linq uses deferred execution. You can use linq for arrays and links and others similar to those. I'll just use List for the examples. Some examples using linq. (I just have a List<string> of some random words).
+
 
 ```
 var query1 = theList.Where(i => i.StartsWith("w"));
@@ -73,6 +75,11 @@ var query5 = theList.Where(word => word.Length > 5).OrderBy(w => w.Length).ThenB
 //animation2
 //animation3
 //fluoride10
+```
+```
+from num in numbers where (num % 2) == 0  select num;
+from num in numbers where (num.number % 2) == 0  select num;
+from num in numbers where (num.number % 2) == 0  select num.someOtherProp;
 ```
 
 Linq also provides a way to filter based on type:` theList.OfType<WhateverType>`
