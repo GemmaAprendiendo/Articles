@@ -385,3 +385,11 @@ You can also do .AsParallel().AsSequential() to process sequentially.
 We can also start the iteration among the results before it has completed, if we do this: res.ForAll(p => { Console.WriteLine(p.Age); });
 
 If any queries throw exceptions, they will be thrown as an AggregateException at the end.
+
+##Additional
+
+If you are getting a cross-thread operation error, which will happen when the control you are trying to 
+access has theControl.InvokeRequired is true, you can do something like this:
+```
+theControle.Invoke(new MethodInvoker(delegate { do whatever to the control here}));
+```

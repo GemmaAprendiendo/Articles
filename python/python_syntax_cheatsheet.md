@@ -172,6 +172,10 @@ while number < 10:
     number = number+1
 ```
 
+## break, continue, pass
+Break and continue work as in other languages.
+pass is just used when we just have a comment inside the for for now, so the code compiles with just the comment. 
+
 ```
 def myFunc(name):
     print(name)
@@ -238,4 +242,61 @@ message = "0>1" if (0>1) else "1>0"
 print (message)
 #prints 1>0
 ```
+
+`is` is not the same as equal.  IS will compare memory locations for equality, not the values in them.  However, if we compare 1 to 1, they will be stored in the same memory because they are so simple, so `is` will return true.  This works for simple types. 2 lists with the same elementes will still have different memory locations.
+
+
+
+## enumerate
+
+```
+for i, char in enumerate("hellooooo"):
+    print(i, char)
+```
+prints:
+```
+0 h
+1 e
+2 l
+3 l
+4 o
+5 o
+6 o
+7 o
+8 o
+```
+
+
+
+Info for function in python comes between trippe quotes (''')
+
+```
+def hello():
+    '''
+    this is a hello function
+    '''
+    print("hello")
+
+hello()
+```
+
+```
+def func(*args): #accet any num of arguments with the *
+    print (*args) #1 2 3 4 5
+    print(args) #(1,2,3,4,5)
+    return sum(args) #15
+    
+print(func(1,2,3,4,5))
+
+
+def func(*args, **kwargs): #accet any num of arguments with the *
+    print (*args) #1 2 3 4 5
+    print(args) #(1,2,3,4,5)
+    print(kwargs)
+    return sum(args) #15
+    
+print(func(1,2,3,4,5, num1=5, nuym2=10))
+```
+
+If we have different types of parameters the order matters
 
