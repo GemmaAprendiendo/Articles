@@ -331,5 +331,17 @@ Console.WriteLine(e); //prints one, two.
 You can have a method and have a local function inside that method (starting with C#7). That local function can be accessed only from within that method. It could be something like int whateverMethod() function {... }
 
 
+##find specific row in datagrid
+```
+int rowIndex = -1;
 
+DataGridViewRow row = yourDatagrid.Rows
+    .Cast<DataGridViewRow>()
+    .Where(r => r.Cells["YourCol"].Value.ToString().Equals(searchValue))
+    .First();
+
+rowIndex = row.Index;
+
+//or where (r=> Convert.ToBoolean(r.Cells["YourCol"].Value) == true
+```
 
