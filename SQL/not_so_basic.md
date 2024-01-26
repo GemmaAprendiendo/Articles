@@ -416,6 +416,10 @@ You can also have an if elseif with a list or arguments:
 
 `SELECT DECODE(3,1, 'same as 1,', 2, 'same as 2', 'not same as anything');`
 
-## Get latest date or whatever in a table.
+## Get with like '%whatever%' when the column is JSON
+```
+SELECT * 
+FROM yourtable
+WHERE yourJSONcolumn::text like '%whatever%'
 
 
