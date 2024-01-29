@@ -114,3 +114,9 @@ Console.WriteLine(v.first);//20
 Console.WriteLine(x);//20
 Console.WriteLine(y);//30
 ```
+
+# Get a list of tuples from a list of tuples
+
+```
+List<Tuple<int,int>> sublist = originalListWithMoreItems.Select(row => new Tuple<int, int>(row.Item1, row.Item2)).ToList();
+```
