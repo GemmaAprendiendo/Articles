@@ -393,3 +393,18 @@ access has theControl.InvokeRequired is true, you can do something like this:
 ```
 theControle.Invoke(new MethodInvoker(delegate { do whatever to the control here}));
 ```
+
+
+Or same as above in other words:
+
+# Threading and the UI
+
+You can't update the UI from a thread that is not the one where the UI is running.  You can do something like this though:
+```
+TupleOrWhateverType varname = await SomeAsyncMethod();
+YouCanSetAVariableTovarname = varname;
+//for accessing the UI
+comboboxorwhateverUIelement.Invoke(new MethodInvoker(delegate 
+   {comboboxorwhateverUIelement.SelectedIndex = (int) varname;}));
+
+//SelectedIndex or whatever property.
