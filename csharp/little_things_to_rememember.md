@@ -345,3 +345,90 @@ rowIndex = row.Index;
 //or where (r=> Convert.ToBoolean(r.Cells["YourCol"].Value) == true
 ```
 
+## About nulls and nullables
+
+Starting with value types.
+
+![pic.](images/nulls1.png)
+
+Add the `?` to make the value types nullable and now we can null them all.
+
+![pic.](images/nulls2.png)
+
+Now for reference types.
+
+![pic.](images/nulls3.png)
+
+Now we add #nullable enable (it can also be added to the project with <Nullable>enable</Nullable> (.NET 8)
+
+![pic.](images/nulls4.png)
+
+Add `?` like in the value types and now we don’t get that warning anymore:
+
+![pic.](images/nulls5.png)
+
+Of course if you want to use it, instantiate the class.
+
+![pic.](images/nulls6.png)
+
+
+Use `??` to give an alternative value if the one you want to use is null.
+
+```
+using System;	
+#nullable enable
+public class Program
+{
+	public static void Main()
+	{
+		string theString = "hello";
+      	string theOtherString = null;
+      	Console.WriteLine(theString ?? "Just Me"); //hello
+      	Console.WriteLine(theOtherString ?? "Just Me");//Just Me
+	}	
+}
+```
+Use `??=` to assign the variable to the new value only if it is null
+
+```
+using System;	
+#nullable enable
+public class Program
+{
+	public static void Main()
+	{
+		int? iamnull = null;
+		int? iamNOTnull = 10;
+		
+		//use ??= to assing the value only if the variable is null
+		iamnull??= 15;
+		iamNOTnull??= 15;
+		
+		Console.WriteLine(iamnull); //15
+		Console.WriteLine(iamNOTnull); //10
+	}	
+}
+```
+
+use `?` before accessing a property so it is not accessed if the class is null.
+
+```
+using System;	
+#nullable enable
+public class Program
+{
+	public static void Main()
+	{
+		Test t1 = new Test();
+		Test t2 = new Test();
+		Console.WriteLine(t1.name);
+		t2 = null;
+		Console.WriteLine(t2?.name); //use ? so the property is not accessed if t2 is null
+	}	
+	public class Test
+	{
+		public string name = "myname";		
+	}
+}
+```
+
