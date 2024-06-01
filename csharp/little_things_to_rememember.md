@@ -432,3 +432,8 @@ public class Program
 }
 ```
 
+### Integers and Race Conditions
+
+It doesn't look like it, but the ++and - -operators are not atomic, meaning, they could switch threads while in operation. Not likely because they are so fast, but just saying. You could use a lock statement to prevent this, but, that seems overkill for just an increment. Instead, Increment() and Decrement() which are thread safe.
+
+![pic.](images/littlethings1.png)
