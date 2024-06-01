@@ -1,4 +1,73 @@
-# New! and not so new (C#9, 10, 11)
+# New! and not so new 
+
+## C# 7.3
+
+![pic.](images/new1.png)
+
+## C# 8
+
+### Structures
+
+Microsoft recommends using structures for immutable data (does not change). You can do this already by creating the structure as readonly. When you do that, the fields must also be read only and properties have to be read only or init. This is not new, the new part is coming up.
+
+![pic.](images/new2.png)
+
+If the whole structure will not be read only, you can have some members be read only. This is the new part. You can use those read only members to make sure the structure will not be modified. Look at the difference between these two:
+![pic.](images/new3.png)
+
+![pic.](images/new4.png)
+
+### Interfaces 
+
+Interfaces can now provide an implementation for their methods; those are like default implementations.
+
+![pic.](images/new5.png)
+
+However
+
+![pic.](images/new6.png)
+
+![pic.](images/new7.png)
+
+Pattern Matching enhancements were done, but please check that on the Pattern Matching article.
+
+### using
+
+
+![pic.](images/new8.png)
+
+Starting with C#8, we can also have it as a using declaration.
+
+![pic.](images/new9.png)
+
+### STATIC local functions
+
+![pic.](images/new10.png)
+
+Instead:
+
+![pic.](images/new11.png)
+
+Nullable reference types were also added. But check the nullable or not nullable article for information on this.
+
+### Range Operator ..
+
+![pic.](images/new12.png)
+
+![pic.](images/new13.png)
+
+You don't have to provide both start and end, you could do this to get all of them:
+
+![pic.](images/new14.png)
+
+
+Nulls have changes, see little things article instead of this one
+
+### index type
+
+![pic.](images/new16.png)
+
+
 
 ## C# 9
 
@@ -221,7 +290,7 @@ For diagnostics, you can use CallerArgumentExpression to get info from a specifi
 
 ## C# 11
 
-Generic Attributes:
+### Generic Attributes:
 
 ```
 public class GenericAttribute<T> : Attribute { }
@@ -249,7 +318,7 @@ You can add the required modifier to properties and fields to enforce constructo
 
 Beginning in C# 11, you can use the file access modifier to create a type whose visibility is scoped to the source file in which it is declared.
 
-## List Patterns
+### List Patterns
 
 ```
 //lists[0] = { 1, 2, 3, 4};
@@ -318,3 +387,26 @@ var text6 = s6 switch
    Console.WriteLine(text6);
    ```
    
+## C#12
+
+### Primary Constructors
+
+Primary constructor parameters are in scope for the entire body of the class. To ensure that all primary constructor parameters are definitely assigned, all explicitly declared constructors must call the primary constructor using this() syntax. Adding a primary constructor to a class prevents the compiler from declaring an implicit parameterless constructor. In a struct, the implicit parameterless constructor initializes all fields, including primary constructor parameters to the 0-bit pattern.
+Primary constructor parameters aren't members of the class. Primary constructor parameters don't become properties, except in record types.
+
+![pic.](images/new17.png)
+
+![pic.](images/new18.png)
+
+### Collection Expressions
+
+![pic.](images/new19.png)
+
+The spread operator, .. in a collection expression replaces its argument with the elements from that collection.
+
+![pic.](images/new20.png)
+
+### Default Values for Lambda Expressions
+
+![pic.](images/new21.png)
+
