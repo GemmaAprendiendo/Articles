@@ -394,7 +394,7 @@ var text6 = s6 switch
 Primary constructor parameters are in scope for the entire body of the class. To ensure that all primary constructor parameters are definitely assigned, all explicitly declared constructors must call the primary constructor using this() syntax. Adding a primary constructor to a class prevents the compiler from declaring an implicit parameterless constructor. In a struct, the implicit parameterless constructor initializes all fields, including primary constructor parameters to the 0-bit pattern.
 Primary constructor parameters aren't members of the class. Primary constructor parameters don't become properties, except in record types.
 
-![pic.](images/new17.png)
+
 
 ![pic.](images/new18.png)
 
