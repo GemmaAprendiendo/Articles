@@ -71,6 +71,9 @@ amount = 48.34555
 print(f"The amount is {amount}");
 formatted_amount = "{:.2f}".format(amount); #48.34555
 print(f"The amount is {formatted_amount}"); #48.35
+
+
+print("Splitting", total_candies, "candy" if total_candies == 1 else "candies")
 ```
 
 ## conditionals 
@@ -387,5 +390,18 @@ a, b = b, a
 
 Get help about a function: `help(round)`
 
+all numbers are treated as true, except 0
 
+all strings are treated as true, except the empty string ""
+
+```
+def exactly_one_topping(ketchup, mustard, onion):
+    """Return whether the customer wants exactly one of the three available toppings
+    on their hot dog.
+    """
+    pass
+    return (ketchup + mustard + onion) == 1
+	
+return (int(ketchup) + int(mustard) + int(onion)) == 1
+```
 
