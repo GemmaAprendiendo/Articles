@@ -171,6 +171,46 @@ scores = [6,6, 10,8]
 print(max(scores)) #10
 ```
 
+The elements don't have to be the same type.  This is a valid one `[32, 'raindrops on roses', help]`
+
+To find the first 3 elements of a list : `planets[0:3]` Leaving our the 0 and doing only `:3` it assumes 0.
+Leaving out the second one assumes until the end `planets[3:]`
+
+`planets[1:-1]` --> not index 0, and not index -1, which means the last one.
+
+`planets[-3:]` --> from the third one from the end, to the last one
+
+sort a list: `sorted(thelist)`
+
+add the elements: `sum(somelistwithnumbers)`
+
+append appends an element at the end.  Pop removes the last element.  It also returns it.  We can get the index of an element by `thelist.index('thevalue')`;
+
+Before trying to get the index, check if the element is in the list with `'TheValue' in TheList`
+
+If we need to see everything available for a list type, we can do `help(thelist)`
+
+## Lists vs Tuples
+
+tuples are created with () instead of [], and they are immutable.
+
+```
+t = (1, 2, 3)
+
+t = 1, 2, 3
+```
+
+if we have a function returning a tuple, we can assign the result to different variables `value1, value2 = x.someFunctionReturningTuple()`
+
+**Swap 2 variables:**
+
+```
+a = 1
+b = 0
+a, b = b, a
+print(a, b)
+```
+
 ## Loops
 ```
 for number in range(1, 15):
@@ -405,3 +445,4 @@ def exactly_one_topping(ketchup, mustard, onion):
 return (int(ketchup) + int(mustard) + int(onion)) == 1
 ```
 
+we can return `return None`, not the string "None", just None.
