@@ -211,6 +211,36 @@ a, b = b, a
 print(a, b)
 ```
 
+## List comprehensions
+
+```
+thearray = []
+# range will create 10 iterations
+for n in range(10):
+    thearray.append(n**2)
+print(thearray) # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+```
+
+The above thing can be done this way
+```
+thearray = [n**2 for n in range(10)]
+print(thearray)
+```
+Could also add an if in there
+
+```
+thearray = [number for number in range(10) if number*2 < 10]
+print(thearray) # [0, 1, 2, 3, 4]
+
+# similar to a select from where
+```
+
+Could have also done 
+
+```
+print ([32 for numbers in range(9)]) 
+#[32, 32, 32, 32, 32, 32, 32, 32, 32]
+```
 ## Loops
 ```
 for number in range(1, 15):
