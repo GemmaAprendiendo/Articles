@@ -459,6 +459,49 @@ a, b = b, a
 
 all strings are treated as true, except the empty string ""
 
+print() adds the new line at the end unless we say otherwise
+```
+print("Try programiz.pro")
+print("hey")
+print("no new line - ", end="")
+print ("hey") #no new line - hey
+```
+```
+thestring = "hello"
+print([char for char in thestring]) #['h', 'e', 'l', 'l', 'o']
+```
+As opposed to lists, strings are **immutable**.
+
+```
+longsentence = "hello how are you"
+arraywiththewords = longsentence.split()
+print(arraywiththewords) #['hello', 'how', 'are', 'you']
+
+longsentence = "hello-how-are-you"
+arraywiththewords = longsentence.split('-')
+print(arraywiththewords) #['hello', 'how', 'are', 'you']
+```
+```
+longsentence = "@@".join(["how", "are", "you?"])
+print(longsentence) #how@@are@@you?
+```
+```
+print (str(10))
+```
+```
+print ("{}, you'll always be the {}st planet to me.".format("You", 1))
+#You, you'll always be the 1st planet to me.
+```
+
+```
+#dictionary
+numbers = {'one':1, 'two':2, 'three':3}
+print(numbers['two']) #2
+
+newdic = {number: number*2 for number in range(10)}
+print(newdic) #{0: 0, 1: 2, 2: 4, 3: 6, 4: 8, 5: 10, 6: 12, 7: 14, 8: 16, 9: 18}
+```
+
 ## Other
 
 Get help about a function: `help(round)`
