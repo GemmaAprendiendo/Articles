@@ -455,6 +455,9 @@ b = [3, 2, 1]
 a, b = b, a
 ```
 
+## strings and dictionaries
+
+all strings are treated as true, except the empty string ""
 
 ## Other
 
@@ -462,7 +465,7 @@ Get help about a function: `help(round)`
 
 all numbers are treated as true, except 0
 
-all strings are treated as true, except the empty string ""
+
 
 ```
 def exactly_one_topping(ketchup, mustard, onion):

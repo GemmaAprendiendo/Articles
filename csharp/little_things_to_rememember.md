@@ -437,3 +437,17 @@ public class Program
 It doesn't look like it, but the ++and - -operators are not atomic, meaning, they could switch threads while in operation. Not likely because they are so fast, but just saying. You could use a lock statement to prevent this, but, that seems overkill for just an increment. Instead, Increment() and Decrement() which are thread safe.
 
 ![pic.](images/littlethings1.png)
+
+### Window State
+Windows forms have the resize event, which gets called not only on resizing but also when the window changes state (minimized, maximized) but by the time we get to it the state has already changed.
+
+In that event we can keep track of the previous state by using a tuple: (previous, current) and on the Resize event, set the previous to whatever the current has, and the current to the window.WindowState.
+Then when we need to restore the state we can
+```
+//do not change if not minimized because we could end up changing to minimize it
+if (theform.WindowState == FormWindowState.Minimized)
+{
+	theForm.WindowState = theForm.thetuple.previous
+}
+theForm.Activate() //this will bring it to the front if it was not minimized but it was behind another screen
+```
