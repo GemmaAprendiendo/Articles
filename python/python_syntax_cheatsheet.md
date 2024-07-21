@@ -114,6 +114,15 @@ For the modules, we can just name the file and import that directly, and use the
 `random() ` --> 0 to 0.9999 float number
 `ranint(1,10) ` --> 1 to 10
 
+```
+
+import math as mt
+mt.pi
+
+from math import *  #so we don't have to say math. for each function. NOT RECOMMENDED
+print(pi, log(32, 2)
+```
+
 ## arrays, lists
 
 ```
@@ -240,6 +249,12 @@ Could have also done
 ```
 print ([32 for numbers in range(9)]) 
 #[32, 32, 32, 32, 32, 32, 32, 32, 32]
+```
+```
+list_1 = [10 if (x == 'J' or x== 'Q' or x == 'K') else x for x in hand_1]
+list_2 = [10 if (x == 'J' or x== 'Q' or x == 'K') else x for x in hand_2]
+
+#will replae J Q or K with 10, the rest are the same
 ```
 ## Loops
 ```
