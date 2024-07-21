@@ -492,7 +492,27 @@ print (str(10))
 print ("{}, you'll always be the {}st planet to me.".format("You", 1))
 #You, you'll always be the 1st planet to me.
 ```
+```
+somestring.isdigit() #whether all charaters are digits
+```
 
+Some harder things with strings
+```
+def word_search(doc_list, keyword):
+
+	list_of_indexes = [] #array will be populated with indexes
+
+	#use for with index and word so we can access the index
+	#casefold to ignore the casing without using upper or lower
+	for index, word in enumerate(doc_list):
+		splitted_in_words = word.split()
+		if ( keyword.casefold() in map(str.casefold, splitted_in_words) 
+			or (keyword+".").casefold() in map(str.casefold, splitted_in_words) 
+			or (keyword+",").casefold() in map(str.casefold, splitted_in_words)) :
+				list_of_indexes.append(index)
+				
+	 return list_of_indexes
+```
 ```
 #dictionary
 numbers = {'one':1, 'two':2, 'three':3}
