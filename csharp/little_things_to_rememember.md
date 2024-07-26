@@ -451,3 +451,50 @@ if (theform.WindowState == FormWindowState.Minimized)
 }
 theForm.Activate() //this will bring it to the front if it was not minimized but it was behind another screen
 ```
+
+### Opening Window
+
+Besides opening a window with ShowDialog and then making sure it is disposed of when closing, we can do this and it will dispose of itself when done.
+```
+using (SomeWindowType thewindow = new SomeWindowType())
+{
+	 var result = thewindow.ShowDialog();
+	 if (result == DialogResult.OK) ....
+ }
+ ```
+In the window that was opened, to pass the data back, in the appropriate events (Ok, cancel etc):
+
+```
+this.DialogResult = DialogResult.OK;
+this.Close();
+
+this.DialogResult = DialogResult.Cancel;
+this.Close();
+```
+
+### ComboBoxes
+
+You can populate the combobox by setting its DataSource to the list we need, or by doing 
+```
+thecombobox.Items.AddRange(thelist.ToArray())
+```
+If we set the data in the drop down with DataSource, we will not be able to add items to it at runtime.
+
+You can also have the list be of a class with many properties and choose which property will be used as the display and as the value:
+```
+thecombobox.ValueMember = "Prop1";
+thecombobox.DisplayMember = "Prop2";
+```
+Prop1 and Prop2 have to be properties in the class.  This will not work if those are just fields.
+
+To get the value from the drop down:
+```
+TheObject = this.thecombobox.Items.Cast<TheObject>().FirstOrDefaut(x=> x that whatever)
+```
+To unselect the drop down use `thecombobox.SelectedItem=-1`
+But that may not be enough if you had something already selected, you may also need
+```
+thecombobox.SelectedText = ""
+thecombobox.Text = ""
+```
+Remember to clear the items before reloading.
