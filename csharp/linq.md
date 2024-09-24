@@ -217,3 +217,25 @@ XElement xml = new XElement("CATEGORIES",  (from c in catList
 );
 ```
 
+
+# When looking for elements contained on another list
+
+this works:
+```
+var someListOfParentElements someBiggerList.select(item => item.id).ToList();
+var someElements = (from sometable in db.SomeTable
+					where someListOfParentElements.Contains(sometable.someid)
+					select new 
+					{
+						//some fields from someTable
+					}).ToList();
+```
+
+But having it all on one statement, like this, gives an exception
+```
+var someElements = (from sometable in db.SomeTable
+					where someBiggerList.select(item => item.id).ToList().Contains(sometable.someid)
+					select new 
+					{
+						//some fields from someTable
+					}).ToList();
