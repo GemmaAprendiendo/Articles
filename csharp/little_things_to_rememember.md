@@ -498,3 +498,17 @@ thecombobox.SelectedText = ""
 thecombobox.Text = ""
 ```
 Remember to clear the items before reloading.
+
+## Exception ... When
+
+When we want to handle the exception with more specification that what the exception type can provide
+```
+try
+{
+    //some code here
+}
+catch (Exception e) when (e.ErrorCode == 0x1234 || someVariableYouHave == "whatever")
+{
+    // Handle the *specific* error
+}
+```
