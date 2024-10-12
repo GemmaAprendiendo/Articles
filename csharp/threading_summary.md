@@ -386,18 +386,18 @@ We can also start the iteration among the results before it has completed, if we
 
 If any queries throw exceptions, they will be thrown as an AggregateException at the end.
 
-##Additional
+## Additional
 
 If you are getting a cross-thread operation error, which will happen when the control you are trying to 
 access has theControl.InvokeRequired is true, you can do something like this:
 ```
-theControle.Invoke(new MethodInvoker(delegate { do whatever to the control here}));
+theControl.Invoke(new MethodInvoker(delegate { do whatever to the control here}));
 ```
 
 
 Or same as above in other words:
 
-# Threading and the UI
+## Threading and the UI
 
 You can't update the UI from a thread that is not the one where the UI is running.  You can do something like this though:
 ```
@@ -408,3 +408,15 @@ comboboxorwhateverUIelement.Invoke(new MethodInvoker(delegate
    {comboboxorwhateverUIelement.SelectedIndex = (int) varname;}));
 
 //SelectedIndex or whatever property.
+```
+## Exceptions in Async
+
+You need the try / catch block in the Task code itself, not on the method starting the task.
+
+We can also use a continuation task (see above for ContinueWith) to handle an exception, since the task 
+scheduler will schedule the continuation when it detects that the previous task threw and unhandled
+exception.
+
+We can have the try / catch in the main method or whatever method using the task if we have a task.Wait,
+the catch would be catching an AggregateException.
+
