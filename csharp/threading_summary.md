@@ -397,7 +397,7 @@ theControl.Invoke(new MethodInvoker(delegate { do whatever to the control here})
 
 Or same as above in other words:
 
-## Threading and the UI
+### Threading and the UI
 
 You can't update the UI from a thread that is not the one where the UI is running.  You can do something like this though:
 ```
@@ -409,6 +409,53 @@ comboboxorwhateverUIelement.Invoke(new MethodInvoker(delegate
 
 //SelectedIndex or whatever property.
 ```
+
+More on this.
+
+There are two ways to safely call a Windows Forms control from a thread that didn't create that control. 
+Use the System.Windows.Forms.Control.Invoke method to call a delegate created in the main thread, which in turn calls the control. 
+Or, implement a System.ComponentModel.BackgroundWorker (see BackgroundWorker article).
+
+The System.Windows.Forms.Control.InvokeRequired property, which compares the control's creating thread ID to the calling thread ID. 
+If they're different, you should call the Control.Invoke method.
+
+```
+public void WriteTextSafe(string text)
+{
+    if (textBox1.InvokeRequired)
+    {        
+        textBox1.Invoke("updated from invoke required");
+    }
+    else
+        textBox1.Text = "normal update";
+}
+```
+
+Note:
+Delegate.Invoke: Executes synchronously, on the same thread.
+Delegate.BeginInvoke: Executes asynchronously, on a threadpool thread.
+
+Control.Invoke: Executes on the UI thread, but calling thread waits for completion before continuing.
+Control.BeginInvoke: Executes on the UI thread, and calling thread doesn't wait for completion.
+
+You could have code like this so you don't have to be doing the above code over and over
+```
+public static void InvokeIfRequired(this Control control, MethodInvoker action)
+{   
+    if (control.InvokeRequired) {
+        control.Invoke(action);
+    } else {
+        action();
+    }
+}
+
+whateverControl.InvokeIfRequired(() =>
+{
+    // Do anything you want with the control here
+    whateverControl.RtfText = value;    
+});
+```
+
 ## Exceptions in Async
 
 You need the try / catch block in the Task code itself, not on the method starting the task.
