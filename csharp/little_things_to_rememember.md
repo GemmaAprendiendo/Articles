@@ -512,3 +512,33 @@ catch (Exception e) when (e.ErrorCode == 0x1234 || someVariableYouHave == "whate
     // Handle the *specific* error
 }
 ```
+
+## AppDomain.CurrentDomain.UnhandledException
+
+This event is triggered when an exception is thrown in any thread of the application, and it's not caught by any try-catch block within the application.  You can use it as a notification
+thing, not to recover from a specific exception.
+
+This is how you could use it:
+
+```
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Register the UnhandledException event with a handler method
+        AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandlerMethod);
+        
+        throw new Exception("This exception is unhandled by the application code.");
+    }
+
+    // This method will be called when an unhandled exception occurs
+    static void MyHandlerMethod(object sender, UnhandledExceptionEventArgs args)
+    {
+        Exception e = (Exception)args.ExceptionObject;
+        Console.WriteLine("MyHandlerMethod caught : " + e.Message);
+        //do something like log it somewhere or whatever you need to do, for notification, not to recover from it.
+    }    
+}
+```
