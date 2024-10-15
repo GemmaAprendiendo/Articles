@@ -221,7 +221,8 @@ Console.WriteLine("START");
 Task T1 = new Task(Method11);
 T1.Start();
 
-Task T2 = Task.Factory.StartNew(Method22);
+// you can pass TaskCreationOptions.LongRunning if the task is going to take a long time
+Task T2 = Task.Factory.StartNew(Method22); 
 
 Task T3 = Task.Run(Method33);
 
@@ -467,3 +468,68 @@ exception.
 We can have the try / catch in the main method or whatever method using the task if we have a task.Wait,
 the catch would be catching an AggregateException.
 
+## Cancelling a Task -  CancellationToken
+
+A task that supports cancellations monitors a CancellationToken by periodically polling it.
+
+In your main method, you can create the CancellationTokenSource
+
+```
+var cts = new CancellationTokenSource();
+```
+
+When you start the task, make sure you start it with the cancellation token source you have created.
+```
+var task = Task.Run(() => MyLongRunningOperation(cts.Token));
+```
+
+Have some condition where the task should be cancelled
+```
+if (whatever your condition for cancelling)
+{
+    Console.WriteLine("\nCanceling...");
+    cts.Cancel(); // Signal cancellation //the cts that you created above.
+}
+```
+
+When you are awating the task, if there is a cancel it will know and you can do whatever in the exception
+
+```
+try
+{
+	await task; // Wait for the task to complete or be cancelled
+}
+catch (OperationCanceledException) 
+{
+	Console.WriteLine("Operation was cancelled.");
+}
+finally
+{
+	cts.Dispose(); 
+}
+```
+Could also handle the cancellation this way if we have passed the token to MyLongRunningOperation and we are doing this in MyLongRunningOperation
+
+```
+catch(Exception)
+{
+	if (token.IsCancellationRequested) { whatever }
+}
+```
+
+There is a Register() that you can use to do something whenever a cancellation is requiested.
+
+From the Token (token in the example) of the CancellationTokenSource, 
+
+```
+// Register a callback for when cancellation is requested
+using (token.Register(() =>
+{
+	Console.WriteLine("\nCleanup actions on cancellation...");
+    // do whatever you want to do here
+}))
+      
+```
+
+token.ThrowIfCancellationRequested() can be called within your code to check if cancellation has been requested. 
+If cancellation is requested, it throws an OperationCanceledException, which can be caught in the Main method to handle the cancellation gracefully.
