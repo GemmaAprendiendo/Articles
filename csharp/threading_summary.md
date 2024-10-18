@@ -533,3 +533,37 @@ using (token.Register(() =>
 
 token.ThrowIfCancellationRequested() can be called within your code to check if cancellation has been requested. 
 If cancellation is requested, it throws an OperationCanceledException, which can be caught in the Main method to handle the cancellation gracefully.
+
+## IAsyncEnumerable
+
+Introduced with C# 8. Used to stream data asynchronously.
+
+```
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+		//use the await in a foreach for a method that returns an IAsyncEnumerable.
+		//It will print the numbers as they become available
+        await foreach (var number in GenerateNumbersAsync())
+        {
+            Console.WriteLine(number);
+        }
+    }
+
+    static async IAsyncEnumerable<int> GenerateNumbersAsync()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            await Task.Delay(500); // Simulate asynchronous work
+            yield return i;
+        }
+    }
+}
+
+```
+It can also be used with a CancellationToken with an EnumerationCancellationAttribute.
