@@ -101,3 +101,75 @@ class Program
     }
 }
 ```
+
+You can clear and set request headers with 
+```
+client.DefaultRequestHeaders.Accept.Clear();
+client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+```
+
+If you are getting json back:
+
+```
+//sends the http get request
+var json = await client.GetStringAsync("https://whatever");
+```
+Could have also done
+
+```
+await using Stream stream = await client.GetStreamAsync("https://whatever");
+var YourClassVar = await JsonSerializer.DeserializeAsync<List<YourClass>>(stream);
+	
+```
+
+When creating a new HttpClient you can give it a base class.  When you use this HttpClient, you will not have to give the base address again.
+
+```
+private static HttpClient sharedClient = new()
+{
+    BaseAddress = new Uri("https://jsonplaceholder.typicode.com"),
+};
+```
+
+The User-Agent request header is a string that lets servers and network peers identify the 
+application, operating system, vendor, and/or version of the requesting user agent.
+For example, when requesting from the GitHub API, Most GitHub REST API endpoints specify 
+that you should pass an Accept header with a value of application/vnd.github+json. The value of the Accept header is a media type.
+```
+client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+```
+
+All API requests for GitHub must include a valid User-Agent header. The User-Agent header identifies the user or application that is making the request.
+GitHub recommends using your GitHub username, or the name of your application, for the User-Agent header value.
+
+```
+client.DefaultRequestHeaders.Add("User-Agent", "YOUR APP HERE");
+```
+We can get a HttpResponseMessage but we can also send a HttpRequestMessage.
+```
+var msg = new HttpRequestMessage(HttpMethod.Get, url);
+var res = await client.SendAsync(msg);
+
+var content = await res.Content.ReadAsStringAsync();
+```
+If the api needs parameters, you can add them this way.
+```
+ ".....?name=JohnDoe&occupation=gardener";
+ ```
+ You can set the timeout for the request with
+ ```
+ \\3 minutes
+ httpClient.Timeout = TimeSpan.FromMinutes(3);
+ ```
+ POST requests are often sent via a post form. The type of the body of the request is indicated by the Content-Type header.
+ ```
+ data //data of whatever type you have
+ var res = await client.PostAsync(url, new FormUrlEncodedContent(data));
+ ```
+ Don't forget that many times you will need Authorization
+ 
+```
+var authToken = Encoding.ASCII.GetBytes($"{userName}:{passwd}");
+client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authToken));
+```		
+
