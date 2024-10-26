@@ -355,6 +355,15 @@ print(array[1::2])
 #[2, 4, 6, 8]
 ```
 
+### Using lambda in a function.
+
+```
+t = lambda var:var *2
+print(t(4)) #prints 8
+```
+
+
+## Other
 unpacking a list
 ```
 a,b,c = [1,2,3]
@@ -389,6 +398,9 @@ print (message)
 `is` is not the same as equal.  IS will compare memory locations for equality, not the values in them.  However, if we compare 1 to 1, they will be stored in the same memory because they are so simple, so `is` will return true.  This works for simple types. 2 lists with the same elementes will still have different memory locations.
 
 
+You could filter an array, array1 with 
+```
+filter(lambda num:num%2 == 0, array1) --> the function passed in or the lambda has to evaluate to true.
 
 ## enumerate
 
@@ -557,3 +569,33 @@ return (int(ketchup) + int(mustard) + int(onion)) == 1
 ```
 
 we can return `return None`, not the string "None", just None.
+
+### dictionary 
+
+```
+dic = {"dictionarykey1":"value1",
+        "dictionaryKey2":"value2"
+        }
+
+dic2 = {1:"valueN1",
+        2:"valueN2"
+        }
+
+dic["dictionaryKey3"] = "value3"
+
+print(dic.items())
+print(dic2.items())
+
+#prints
+```
+#dict_items([('dictionarykey1', 'value1'), ('dictionaryKey2', 'value2'), ('dictionaryKey3', 'value3')])
+#dict_items([(1, 'valueN1'), (2, 'valueN2')])
+```
+
+Could have also accessed
+
+```
+dic.keys()
+dic.values()
+```
+
