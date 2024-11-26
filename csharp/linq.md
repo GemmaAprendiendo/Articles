@@ -239,3 +239,17 @@ var someElements = (from sometable in db.SomeTable
 					{
 						//some fields from someTable
 					}).ToList();
+					
+
+# Example of getting data from the table - complex
+
+```
+var whatever = await (from table1 in db.table1 join table2 in db.table2 on table1.something equals table2.something 
+						...
+						join table5 in db.table5 on table4.something equals table5.something into table5BIS 
+						     let somethingYouWantFromTable5 = table5BIS.Select(item=> item.SomeColumn).FirstOrDefault()
+						join table6 in db.table6 on somethingYouWantFromTable5 equals table6.SomeOtherColumn
+						join ............
+						)
+```
+

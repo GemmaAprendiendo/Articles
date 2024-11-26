@@ -141,6 +141,8 @@ git stash drop stash@{2}
 
 git stash clear
 
+git checkout -b NameOfTheNewBranchCreatedFromTheCurrentOne
+
 git checkout specificCommtHash - view that previous commit. HEAD points to the specific commit, not the branch
 
 git switch someBranchName - HEAD back pointing to the branch
