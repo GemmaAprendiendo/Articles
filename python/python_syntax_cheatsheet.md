@@ -1,5 +1,6 @@
 # Python Syntax Cheatsheet (basic)
 
+set constants as a uppercase variable
 ## Prints
 
 `print("...");`
@@ -72,8 +73,14 @@ print(f"The amount is {amount}");
 formatted_amount = "{:.2f}".format(amount); #48.34555
 print(f"The amount is {formatted_amount}"); #48.35
 
+print(f"la cantidad es {'{:.2f}'.format(cantidad)} ")
 
 print("Splitting", total_candies, "candy" if total_candies == 1 else "candies")
+
+cantidad = 48.34555
+print(f"la cantidad es {cantidad}");
+print(f"la cantidad es {'{:.2f}'.format(cantidad)} ")
+print("la cantidad es", "mayor que 48" if cantidad > 48 else "menor")
 ```
 
 ## conditionals 
@@ -122,6 +129,108 @@ mt.pi
 from math import *  #so we don't have to say math. for each function. NOT RECOMMENDED
 print(pi, log(32, 2)
 ```
+
+## Loops
+```
+for number in range(1, 15):
+    print(number) #prints 1 through 14
+
+#range with stepping
+for number in range(1, 15, 2):
+    print(number) #prints 1 3 5 7 9 11 13
+```
+```
+number = 0
+while number < 10:
+    print(number)
+    number = number+1
+```
+
+## Functions
+```
+def myFunc():
+    print("I")
+    print("am")
+    print("function")
+
+myFunc()
+```
+
+
+```
+def least_difference(a, b, c):
+    """
+    write something here
+    that explains the function
+    """
+    diff1 = 1
+    diff2 = 2
+    diff3 = 3
+    return min(diff1, diff2, diff3)
+
+```
+if we do the above, when we call help(least_difference) we will get the text in triple quotes as help.
+
+Functions that don't return anything will return `None`.
+
+### Functions - break, continue, pass
+`Break` and `continue` work as in other languages.
+`pass` is just used when we just have a comment inside the for or function or whateverw, so the code compiles with just the comment. Otherwise we need to put some code line in there, so we use `pass`
+
+## Functions continued
+
+```
+def myFunc(name):
+    print(name)
+    print(f"the name is {name}")
+
+myFunc("Jay")
+
+def myFunc(name, lastName):
+    print(f"the name is {name}")
+    print(f"the last name is {lastName}")
+
+myFunc("Jay", "Smith")
+myFunc( lastName="Smith", name="Jayleen")
+
+def greet(who="Colin"):
+    print("Hello,", who)
+	
+#default argument
+
+greet()
+greet(who="Kaggle") #could specify the name of the argument, useful maybe if many
+
+
+max(100, 51, 14, key=some_function_you_have) 
+# will run the funtion you passed as key on those numbers, and apply the max to the results from the function.
+```
+
+### Using lambda in a function.
+
+```
+t = lambda var:var *2
+print(t(4)) #prints 8
+```
+
+There are more complex string notes at the end.
+
+### more
+def func(*args): #accet any num of arguments with the *
+    print (*args) #1 2 3 4 5
+    print(args) #(1,2,3,4,5)
+    return sum(args) #15
+    
+print(func(1,2,3,4,5))
+
+
+def func(*args, **kwargs): #accept any num of arguments with the *
+    print (*args) #1 2 3 4 5
+    print(args) #(1,2,3,4,5)
+    print(kwargs)
+    return sum(args) #15
+    
+print(func(1,2,3,4,5, num1=5, nuym2=10))
 
 ## arrays, lists
 
@@ -256,80 +365,7 @@ list_2 = [10 if (x == 'J' or x== 'Q' or x == 'K') else x for x in hand_2]
 
 #will replae J Q or K with 10, the rest are the same
 ```
-## Loops
-```
-for number in range(1, 15):
-    print(number) #prints 1 through 14
 
-#range with stepping
-for number in range(1, 15, 2):
-    print(number) #prints 1 3 5 7 9 11 13
-```
-```
-number = 0
-while number < 10:
-    print(number)
-    number = number+1
-```
-
-## Functions
-```
-def myFunc():
-    print("I")
-    print("am")
-    print("function")
-
-myFunc()
-```
-
-
-```
-def least_difference(a, b, c):
-    """
-    write something here
-    that explains the function
-    """
-    diff1 = 1
-    diff2 = 2
-    diff3 = 3
-    return min(diff1, diff2, diff3)
-
-```
-if we do the above, when we call help(least_difference) we will get the text in triple quotes as help.
-
-Functions that don't return anything will return `None`.
-
-### Functions - break, continue, pass
-`Break` and `continue` work as in other languages.
-`pass` is just used when we just have a comment inside the for or function or whateverw, so the code compiles with just the comment. Otherwise we need to put some code line in there, so we use `pass`
-
-## Functions continued
-
-```
-def myFunc(name):
-    print(name)
-    print(f"the name is {name}")
-
-myFunc("Jay")
-
-def myFunc(name, lastName):
-    print(f"the name is {name}")
-    print(f"the last name is {lastName}")
-
-myFunc("Jay", "Smith")
-myFunc( lastName="Smith", name="Jayleen")
-
-def greet(who="Colin"):
-    print("Hello,", who)
-#default argument
-
-greet()
-greet(who="Kaggle") #could specify the name of the argument, useful maybe if many
-
-
-max(100, 51, 14, key=some_function_you_have) 
-# will run the funtion you passed as key on those numbers, and apply the max to the results from the function.
-```
 
 You can pass other functions as arguments to your funtion.  These are higher-order functions (the ones that get the functions as parameters, not the ones that are passed along)
 
@@ -355,12 +391,7 @@ print(array[1::2])
 #[2, 4, 6, 8]
 ```
 
-### Using lambda in a function.
 
-```
-t = lambda var:var *2
-print(t(4)) #prints 8
-```
 
 
 ## Other
@@ -423,7 +454,7 @@ prints:
 
 
 
-Info for function in python comes between trippe quotes (''')
+Info for function (comments) in python comes between trippe quotes (''')
 
 ```
 def hello():
@@ -436,21 +467,7 @@ hello()
 ```
 
 ```
-def func(*args): #accet any num of arguments with the *
-    print (*args) #1 2 3 4 5
-    print(args) #(1,2,3,4,5)
-    return sum(args) #15
-    
-print(func(1,2,3,4,5))
 
-
-def func(*args, **kwargs): #accept any num of arguments with the *
-    print (*args) #1 2 3 4 5
-    print(args) #(1,2,3,4,5)
-    print(kwargs)
-    return sum(args) #15
-    
-print(func(1,2,3,4,5, num1=5, nuym2=10))
 ```
 
 If we have different types of parameters the order matters
@@ -598,4 +615,53 @@ Could have also accessed
 dic.keys()
 dic.values()
 ```
+
+#id built in function
+
+every object has an id, so we can use the id(whatevervariable) tp see if we are referring to the same exact vble or not, by comparing the ids
+
+# More on functions
+```
+def thefunc(name, *attributes):
+    print(name)
+    print(attributes)
+    
+thefunc("Jay", "is", "a","funny","guy")
+```
+
+prints - 
+Jay
+('is', 'a', 'funny', 'guy')
+
+```
+def thefunc(name, **attributes):
+    print(name)
+    print(attributes)
+    
+thefunc("Jay", att1="funny")
+thefunc("Jane", att1="stars", att2="suns")
+
+```
+
+Prints
+Jay
+{'att1': 'funny'}
+Jane
+{'att1': 'stars', 'att2': 'suns'}
+
+
+```
+def thef():
+    return 1, 2
+
+a, b = thef()
+
+print(a)
+print(b)
+```
+
+Prints
+
+1
+2
 
