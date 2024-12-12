@@ -195,15 +195,15 @@ myFunc( lastName="Smith", name="Jayleen")
 
 def greet(who="Colin"):
     print("Hello,", who)
-	
-#default argument
+	```
+# default argument
 
 greet()
 greet(who="Kaggle") #could specify the name of the argument, useful maybe if many
 
 
 max(100, 51, 14, key=some_function_you_have) 
-# will run the funtion you passed as key on those numbers, and apply the max to the results from the function.
+will run the funtion you passed as key on those numbers, and apply the max to the results from the function.
 ```
 
 ### Using lambda in a function.
