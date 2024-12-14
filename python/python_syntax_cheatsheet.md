@@ -232,6 +232,8 @@ def func(*args, **kwargs): #accept any num of arguments with the *
     
 print(func(1,2,3,4,5, num1=5, nuym2=10))
 
+
+
 ## arrays, lists
 
 ```
@@ -333,7 +335,7 @@ print(a, b)
 
 ```
 thearray = []
-# range will create 10 iterations
+## range will create 10 iterations
 for n in range(10):
     thearray.append(n**2)
 print(thearray) # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
