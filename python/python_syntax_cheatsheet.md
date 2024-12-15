@@ -365,7 +365,7 @@ print ([32 for numbers in range(9)])
 list_1 = [10 if (x == 'J' or x== 'Q' or x == 'K') else x for x in hand_1]
 list_2 = [10 if (x == 'J' or x== 'Q' or x == 'K') else x for x in hand_2]
 
-#will replae J Q or K with 10, the rest are the same
+#will replace J Q or K with 10, the rest are the same
 ```
 
 
