@@ -1,37 +1,39 @@
-# Python Syntax Cheatsheet (basic)
+# Python 1 
 
-set constants as a uppercase variable
-## Prints
+NOTE: Not just in Python but in general, set constants as a uppercase 
 
-`print("...");`
+Note: In VSC right click on a py file and select run .
 
-`myInput = input("...");`
+**`#this is a comment`**
 
-`print("hello " + input("who are you?"));`
+# Prints and strings
 
-`#this is a comment`
+`print("how are you doing?")`
 
-`len("some string:);`
+`myInput = input("...")`
+
+`print("hello " + input("who are you?"))`
+
+`print(len("some string"))`
 
 ```
 print("the question")
 answer = input()
 ```
-`print(type("hello"));`
+`print(type("hello"))`
 
 ```
 stringIs = str(123);
 print(type(stringIs));
 #prints <class 'str'>
 ```
-
-Concatenating a string to an int in python will not cast the int into a string, it will just fail.
+**Concatenating a string to an int in python will not cast the int into a string, it will just fail.**
 
 ```
 print(float(123));
 #prints 123.0
 ```
-Anything coming from the input is a string.
+**Anything coming from the input is a string.**
 
 6/3 will return 2.0 not 2
 
@@ -82,8 +84,61 @@ print(f"la cantidad es {cantidad}");
 print(f"la cantidad es {'{:.2f}'.format(cantidad)} ")
 print("la cantidad es", "mayor que 48" if cantidad > 48 else "menor")
 ```
+```
+import math as mt
+print(mt.pi)
+```
 
-## conditionals 
+```
+def f():
+    name = "Mickey"
+    day = "Saturday"
+    
+    print("Hello %s. How are you on this %s?" % (name, day) )
+    
+	print("Hello {}. How are you on this {}?".format(name, day) )
+
+f()
+
+#shows : Hello Mickey. How are you on this Saturday?
+```
+
+similar to above, **use %d for a number, whether integer or decimal. %f for float, %.2f to specify 2 decimal places**
+
+
+```
+def f():
+    name = "Mickey"
+    number = 1.123456
+    
+    print("Hello {thename}. Ready for {thenumber:.2f}?".format(day, thename=name, thenumber=number) )
+
+f()
+
+#shows : Hello Mickey. Ready for 1.12?
+
+```
+
+```
+  print("Hello {thename:>20}. ".format(thename=name,) )
+  #shows : Hello               Mickey. 
+```
+
+```
+
+def f():
+    number = 0.25
+    
+    print("Hello {:%}. ".format(number) )
+	#Hello 25.000000%. 
+f()
+
+```
+
+
+Use this way for paths: r"C:\\whatever\""\\"
+
+# conditionals 
 
 ```
 number = input("give me a number: ");
@@ -112,7 +167,7 @@ else:
 #use or for and or
 ```
 
-## imports
+# imports
 
 to import something, such as the random module `import random`, then use its functions with `random.whateverfunc`
 
@@ -130,7 +185,7 @@ from math import *  #so we don't have to say math. for each function. NOT RECOMM
 print(pi, log(32, 2)
 ```
 
-## Loops
+# Loops
 ```
 for number in range(1, 15):
     print(number) #prints 1 through 14
@@ -146,7 +201,7 @@ while number < 10:
     number = number+1
 ```
 
-## Functions
+# Functions
 ```
 def myFunc():
     print("I")
@@ -169,15 +224,33 @@ def least_difference(a, b, c):
     return min(diff1, diff2, diff3)
 
 ```
+
+```
+def f5():
+    pass
+```
+
+```
+def f6 (a = "AAA", b="BBB"):
+    print(a)
+    print(b)
+    
+f6("aa", "bb")
+print()
+f6("xx")
+
+```
+
+
 if we do the above, when we call help(least_difference) we will get the text in triple quotes as help.
 
 Functions that don't return anything will return `None`.
 
-### Functions - break, continue, pass
+## Functions - break, continue, pass
 `Break` and `continue` work as in other languages.
 `pass` is just used when we just have a comment inside the for or function or whateverw, so the code compiles with just the comment. Otherwise we need to put some code line in there, so we use `pass`
 
-## Functions continued
+## more about functions
 
 ```
 def myFunc(name):
@@ -204,18 +277,20 @@ greet(who="Kaggle") #could specify the name of the argument, useful maybe if man
 
 max(100, 51, 14, key=some_function_you_have) 
 will run the funtion you passed as key on those numbers, and apply the max to the results from the function.
+
 ```
 
-### Using lambda in a function.
+## Using lambda in a function.
 
 ```
 t = lambda var:var *2
 print(t(4)) #prints 8
 ```
 
-There are more complex string notes at the end.
 
-### more
+## and some more
+
+```
 def func(*args): #accet any num of arguments with the *
     print (*args) #1 2 3 4 5
     print(args) #(1,2,3,4,5)
@@ -223,7 +298,9 @@ def func(*args): #accet any num of arguments with the *
     
 print(func(1,2,3,4,5))
 
+```
 
+```
 def func(*args, **kwargs): #accept any num of arguments with the *
     print (*args) #1 2 3 4 5
     print(args) #(1,2,3,4,5)
@@ -232,9 +309,9 @@ def func(*args, **kwargs): #accept any num of arguments with the *
     
 print(func(1,2,3,4,5, num1=5, nuym2=10))
 
+```
 
-
-## arrays, lists
+# arrays, lists
 
 ```
 someArray = ["one", "two", "three", "four", "five"];
@@ -300,6 +377,42 @@ Leaving out the second one assumes until the end `planets[3:]`
 
 `planets[-3:]` --> from the third one from the end, to the last one
 
+
+```
+thearray1 = [n**2 for n in range(10)]
+print(thearray1)
+
+thearray2 = [number for number in range(10) if number*2 < 10]
+print(thearray2) # [0, 1, 2, 3, 4]
+
+print ([32 for numbers in range(9)]) 
+
+hand_1 = "HAY J y Q y K"
+list_1 = [10 if (x == 'J' or x== 'Q' or x == 'K') else x for x in hand_1]
+print(list_1)
+
+array = [1,2,3,4,5,6,7,8,9]
+print(array[1::2])
+
+a,b,c = [1,2,3]
+print(a,b,c)
+
+a,*b = [1,2,3]
+print(a,b)
+
+a,*b, c = [1,2,3,4,5]
+print(a,b,c)
+
+array1 = [1,2,3,4,5,6,7,8,9]
+filtered= filter(lambda num:num%2 == 0, array1)
+printfiltered= 
+print(listfiltered= 
+print(array1)
+
+
+```
+
+
 sort a list: `sorted(thelist)`
 
 add the elements: `sum(somelistwithnumbers)`
@@ -310,7 +423,21 @@ Before trying to get the index, check if the element is in the list with `'TheVa
 
 If we need to see everything available for a list type, we can do `help(thelist)`
 
-## Lists vs Tuples
+```
+l2 = l1
+print(id(l1))
+print(id(l2))
+```
+both above will have the same id. To have 2 different ones
+
+```
+l2 = l1.copy()
+```
+
+`del l1(2)` #index 
+
+
+# Lists vs Tuples
 
 tuples are created with () instead of [], and they are immutable.
 
@@ -319,6 +446,33 @@ t = (1, 2, 3)
 
 t = 1, 2, 3
 ```
+
+```
+t1 = (1,2,3,4,5) 
+print(t1)
+
+print(t1[1])
+
+print(t1[-2])
+
+print(len(t1))
+
+t2 = (1, 'a')
+print(t2)
+
+a,b,c,d,e = t1
+print(a,b,c,d,e)
+
+t1=(0,1,2)
+t2 = (3,4)
+print(t1+t2)
+
+print(t2 * 2)
+
+x,y = t1
+
+```
+
 
 if we have a function returning a tuple, we can assign the result to different variables `value1, value2 = x.someFunctionReturningTuple()`
 
@@ -331,11 +485,11 @@ a, b = b, a
 print(a, b)
 ```
 
-## List comprehensions
+# List comprehensions
 
 ```
 thearray = []
-## range will create 10 iterations
+#range will create 10 iterations
 for n in range(10):
     thearray.append(n**2)
 print(thearray) # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
@@ -396,7 +550,7 @@ print(array[1::2])
 
 
 
-## Other
+# Other
 unpacking a list
 ```
 a,b,c = [1,2,3]
@@ -435,15 +589,16 @@ they are so simple, so `is` will return true.  This works for simple types. 2 li
 You could filter an array, array1 with 
 ```
 filter(lambda num:num%2 == 0, array1) --> the function passed in or the lambda has to evaluate to true.
+```
 
-## enumerate
+# enumerate
 
 ```
 for i, char in enumerate("hellooooo"):
     print(i, char)
 ```
 prints:
-```
+
 0 h
 1 e
 2 l
@@ -453,7 +608,7 @@ prints:
 6 o
 7 o
 8 o
-```
+
 
 
 
@@ -469,9 +624,6 @@ def hello():
 hello()
 ```
 
-```
-
-```
 
 If we have different types of parameters the order matters
 
@@ -479,7 +631,7 @@ in **Kaggle notebooks**: Add a new code cell by clicking on an existing code cel
 
 Also on those notebooks, you'll call q1.check(), q1.hint(), q1.solution(), for question 2, you'll call q2.check(), and so on. (to get the code checked, or get a hint, or see the solution)
 
-## string and number , operations
+# string and number , operations
 
 ```
 viking_song = "Spam " * spam_amount
@@ -494,7 +646,7 @@ print(float(10))
 print(int('807') + 1)
 ```
 
-## swap variables
+# swap variables
 ```
 a = [1, 2, 3]
 b = [3, 2, 1]
@@ -502,7 +654,7 @@ b = [3, 2, 1]
 a, b = b, a
 ```
 
-## strings and dictionaries
+# strings and dictionaries
 
 all strings are treated as true, except the empty string ""
 
@@ -569,7 +721,7 @@ newdic = {number: number*2 for number in range(10)}
 print(newdic) #{0: 0, 1: 2, 2: 4, 3: 6, 4: 8, 5: 10, 6: 12, 7: 14, 8: 16, 9: 18}
 ```
 
-## Other
+# Other
 
 Get help about a function: `help(round)`
 
@@ -590,7 +742,7 @@ return (int(ketchup) + int(mustard) + int(onion)) == 1
 
 we can return `return None`, not the string "None", just None.
 
-### dictionary 
+## dictionary 
 
 ```
 dic = {"dictionarykey1":"value1",

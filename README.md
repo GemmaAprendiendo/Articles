@@ -1,4 +1,4 @@
-# Articles
-Just some articles, starting to keep them here instead of Medium
+# Articles - Notes
+Just some of my notes
 
-Can also be just notes, or cheatsheets.  This is a mix of different things, but mostly tech notes.
+
