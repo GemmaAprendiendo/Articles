@@ -194,3 +194,291 @@ We can use `_themethod_` to indicate that a method is private, but doesn't mean 
 
 We can call that private method with `self._theprivatemethod_()`
 We can also have method that start with set or get and use those to set and get values from the class.
+
+We can set properties in a class this way:
+
+age = property(fget=some method, fset = some other method)
+
+```
+class C1:
+    
+    def set_age(self, age):
+        if age > 30:
+            raise ValueError("no I said 30 or younger")
+        self._age = age
+        
+    def get_age(self):
+        pass
+    
+    age = property(fget=get_age, fset = set_age)
+    
+
+c = C1()
+
+c.age = 35
+```
+# Inheritance
+
+```
+class Car:
+    def __init__(self, type):
+        self._type = type
+    
+    def WhatAmI(self):
+        print("I'm a " + self._type)
+        
+
+c1 = Car("sedan")
+c1.WhatAmI()
+
+#I'm a sedan
+```
+<br/>
+
+Bellow, we have class Car and class Make, which inherits Car.  Once we define a constructor `(__init__)` for the Make class, the one in the Car class (ancestor) will not be called, but we can call it in the Make's constructor.
+
+Then from Make we can call the methods from Make and from Car
+```
+class Car:
+    def __init__(self, type):
+        self._type = type
+    
+    def WhatAmI(self):
+        print("I'm a " + self._type)
+        
+class Make(Car):
+    
+    def  __init__(self, brand, type):
+        self._brand = brand
+        Car.__init__(self,type)
+
+c1 = Make("Lexus", "sedan")
+c1.WhatAmI()
+
+#I'm a sedan
+```
+We can also inherit from the Exception class to create our own Exception classes.
+To override a method in the parent class, all we have to do is have the same method in the child.
+In Python you cannot have the same method with different arguments in the same class (or hierarchy), this type of method overloading doesn't work in Python.
+
+In the example above, another way we could have called the parent's constructor could have been
+
+```
+class Car:
+    def __init__(self, type):
+        self._type = type
+    
+    def WhatAmI(self):
+        print("I'm a " + self._type)
+        
+class Make(Car):
+    
+    def  __init__(self, brand, type):
+        self._brand = brand
+        super().__init__(type) #--> we are not passing self if using super
+
+c1 = Make("Lexus", "sedan")
+c1.WhatAmI()
+
+#I'm a sedan
+```
+<br/>
+
+```
+class Car:
+    name = "some name"
+    
+    def __init__(self, n):
+        self.name = n
+    
+    def TheName(self):
+        print(self.name)
+        
+
+
+c1 = Car("4Runner")
+c2 = Car("Land Cruiser")
+
+c1.TheName() #4Runner
+c2.TheName() #Land Cruiser
+
+```
+<br/>
+
+BUT!, set it with the class name instead of self ...and it's a static variable
+```
+class Car:
+    name = "some name"
+    
+    def __init__(self, n):
+        Car.name = n #set it with the class name instead of self
+    
+    def TheName(self):
+        print(Car.name)
+        
+
+
+c1 = Car("4Runner")
+c2 = Car("Land Cruiser")
+
+c1.TheName()  #Land Cruiser
+c2.TheName() #Land Cruiser
+```
+
+<br/>
+Use @classmethod to mark a method as static, and return the class variable or whatever.  Call the method with the  class name.  Instead of declaring the class method with `(self)` m so it with `cls`
+
+```
+
+class Car:
+    name = "some name"
+    
+    def __init__(self, n):
+        Car.name = n #set it with the class name instead of self
+    
+	@classmethod
+    def TheName(cls):
+        return Car.name
+
+c1 = Car("4Runner")
+c2 = Car("Land Cruiser")
+
+print(c1.TheName())  #Land Cruiser
+print(c2.TheName()) #Land Cruiser
+
+```
+
+COULD HAVE DONE ` return cls.name` instead of `return Car.name`
+
+You can have multiple inheritance, on inheriting from another and from another, or different classes inheriting from the same one.  If they override a specific method, how is Python looking to find it?
+
+```
+class C1:
+    
+    def __init__(self):
+        pass
+    
+    def TheMethod(self):
+        print("C1 it is")
+
+class C2(C1):
+    def __init__(self):
+        pass
+    
+    def TheMethod(self):
+        print("C2 it is")
+        
+#class C3(C1, C2):
+#    def __init__(self):
+#        pass
+
+c1 = C1()
+c2 = C2()
+#c3 = C3()
+
+c1.TheMethod() #C1 it is
+c2.TheMethod() #C2 it is
+#c3.TheMethod()
+```
+<br/>
+
+BUT
+```
+class C1:
+    
+    def __init__(self):
+        pass
+    
+    def TheMethod(self):
+        print("C1 it is")
+
+class C2(C1):
+    def __init__(self):
+        pass
+    
+    def TheMethod(self):
+        print("C2 it is")
+        
+class C3(C1, C2):
+    def __init__(self):
+        pass
+
+c1 = C1()
+c2 = C2()
+c3 = C3()
+
+c1.TheMethod() 
+c2.TheMethod() 
+c3.TheMethod()
+
+#ERROR!
+#Traceback (most recent call last):
+ # File "<main.py>", line 16, in <module>
+#TypeError: Cannot create a consistent method resolution
+#order (MRO) for bases C1, C2
+
+```
+
+Doesn't know what to do.  However
+
+```
+class C1:
+    
+    def __init__(self):
+        pass
+    
+    def TheMethod(self):
+        print("C1 it is")
+
+class C2(C1):
+    def __init__(self):
+        pass
+    
+    def TheMethod(self):
+        print("C2 it is")
+        
+class C3(C2):
+    def __init__(self):
+        pass
+
+c1 = C1()
+c2 = C2()
+c3 = C3()
+
+c1.TheMethod() #C1 it is
+c2.TheMethod() #C2 it is
+c3.TheMethod() #C2 it is
+
+```
+We could have done this to see how it would look for the method in the chain.
+
+```
+class C1:
+    
+    def __init__(self):
+        pass
+    
+    def TheMethod(self):
+        print("C1 it is")
+
+class C2(C1):
+    def __init__(self):
+        pass
+    
+    def TheMethod(self):
+        print("C2 it is")
+        
+class C3(C2):
+    def __init__(self):
+        pass
+
+print(C3.mro())  
+
+#[<class '__main__.C3'>, <class '__main__.C2'>, <class '__main__.C1'>, <class 'object'>]
+```
+so doing mro() on the C3 class tells us it will look for methods following this order:
+[<class '__main__.**C3**'>, <class '__main__.**C2**'>, <class '__main__.**C1**'>, <class 'object'>]
+
+
+
+You can override methods but not properties
