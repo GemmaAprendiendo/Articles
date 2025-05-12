@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read some other way, train your brain</title>
+	
+	<style>
+        .reverse{
+			transform: scale(-1, 1);
+			font-family: Arial;
+			letter-spacing: 1.8px;
+		}
+		
+		.upsideDown{
+			transform: rotate(-180deg);
+			font-family: Arial;
+			letter-spacing: 1.8px;
+		}
+		
+		body{
+			font-family: Lucida;
+		}
+    </style>
+</head>
+<body>
+    <h3>Read the NYT news backwards or upside down (took NYT because it was easier, no politics here)</h3>
+    		
+	<button onclick="getText('backwards')">Get Text Backwards</button> --- <button onclick="getText('upsideDown')">Get Text Upside Down</button>				
+
+	<div id = "output">
+	
+	</div>
+	
+    <script>
+		async function getText(option)
+		{
+			const url = "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml";
+			var titlesDescArray = [];			
+			var halfArray  = 0;
+			
+			response = await fetch(url);  
+			xmlText = "";  
+			xmlDoc = new Document();    
+			
+			xmlText = await response.text();  
+			var parser = new DOMParser();
+			xmlDoc = parser.parseFromString(xmlText, "text/xml");
+			
+			for (var i=0; i< 20; i++){    
+				obj = {title:"", desc:""};    
+				try{
+					obj.title = (xmlDoc.getElementsByTagName("title")[i].childNodes[0].nodeValue)??"";
+					obj.desc = xmlDoc.getElementsByTagName("description")[i].childNodes[0].nodeValue??"";          
+				}catch{          
+					obj.title = "";
+					obj.desc = "";
+				}
+				titlesDescArray.push(obj);
+			}            
+			//halfArray = Math.round(titlesDescArray.length /2);
+			setValues(titlesDescArray, option);
+		}
+        function setValues(arr, option) {
+            const output = document.getElementById('output');
+						
+			if (output.childElementCount > 0 )
+			{
+				while (output.firstChild) 
+				{ 
+					output.removeChild(output.firstChild); 
+				}
+			}
+			
+			arr.forEach(item => {
+                
+                const h1 = document.createElement('h1');
+				h1.textContent = item.title;
+				if (option == "backwards")
+					h1.className = "reverse";
+				else
+					h1.className = "upsideDown";
+				
+				const p1 = document.createElement('p');
+				p1.textContent = item.title;				
+				
+				const h2 = document.createElement('h2');
+                h2.textContent = item.desc;
+				if (option == "backwards")
+					h2.className = "reverse";
+				else
+					h2.className = "upsideDown";
+
+				const p2 = document.createElement('p');
+				p2.textContent = item.desc;
+				
+				output.appendChild(h1);
+				output.appendChild(p1);
+                output.appendChild(h2);				               
+				output.appendChild(p2);
+                
+            });            
+        }
+    </script>
+</body>
+</html>
