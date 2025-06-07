@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Te pongo 2 textos linea por linea</title>
+	
+	<style>        		
+		body{
+			font-family: Lucida;
+		}
+		button{
+			font-size:15px;
+		}
+    </style>
+</head>
+<body>
+    <h3>Pon el texto en un dioma en un campo y la traduccion en el otro y te los pongo linea a linea</h3> 	
+	<h2>Mejor si no hay numeros o fechas, que pueden trastocar las lineas (mejoras en camino un dia de estos)</h2> 	
+
+	<div id = "theTexts">
+		<form id="myForm" style="width:100%;">
+			<textarea id="text1" rows="10"  style="width:45%;" placeholder="Pega el original"></textarea>
+			<textarea id="text2" rows="10"  style="width:45%;" placeholder="Pega la traducción"></textarea>
+			<br/>
+			<button type="button" onclick="getText()">Linea a Linea</button>
+		</form>
+	
+		<div id="lineas">
+		
+		</div>
+	</div>
+	
+    <script>
+		function replaceNumberDotsWithCommas(str) {
+			// Match numbers with dots (e.g., 123.456, 1.2.3, 123.45.67) and replace dots with commas
+			return str.replace(/(\d+)\.(\d+)/g, (match, beforeDot, afterDot) => {
+			// Replace all dots in the matched number with commas
+			return beforeDot + ',' + afterDot.replace(/\./g, ',');
+			});
+		};
+		
+		function getText() {            
+			
+            let text1 = document.getElementById("text1").value;
+			let text2 = document.getElementById("text2").value;         
+
+			//just so all numbers use the same notation.
+			text1 = 	replaceNumberDotsWithCommas(text1);
+			text2 = 	replaceNumberDotsWithCommas(text2);
+            
+			text1 = text1.endsWith('.') ? text1 : text1 + '.';
+			text2 = text2.endsWith('.') ? text2 : text2 + '.';
+			
+			//having one text using dots for numbers and the other one commas will not work, so change the dots to commas
+			//for the numbers.
+			
+			
+			const output = document.getElementById('lineas');
+			if (output.childElementCount > 0 )
+			{
+				while (output.firstChild) 
+				{ 
+					output.removeChild(output.firstChild); 
+				}
+			}
+			
+			let numberOfLines = 0;
+			let remainingText1 = text1;
+			let remainingText2 = text2;
+			
+			let counter = 0; //just use in case something happens and we end up with a very long loop
+			while (remainingText1.length > 0 && remainingText2.length > 0)
+			{
+				let startIndex = 0;
+			
+				let periodIndex1 = remainingText1.indexOf(".", startIndex);
+				let periodIndex2 = remainingText2.indexOf(".", startIndex);
+			
+				let substring1 = remainingText1.slice(startIndex, periodIndex1 + 1);
+				let substring2 = remainingText2.slice(startIndex, periodIndex2 + 1);
+
+				remainingText1 = remainingText1.slice(0, startIndex) + remainingText1.slice(periodIndex1 + 1);
+				remainingText2 = remainingText2.slice(0, startIndex) + remainingText2.slice(periodIndex2 + 1);
+				
+				const h31 = document.createElement('h3');
+				h31.textContent = substring1;
+				h31.style.color = 'navy';
+				
+				const h32 = document.createElement('h3');
+				h32.textContent = substring2;
+				h32.style.color = 'hotpink';
+				
+				output.appendChild(h31);
+				output.appendChild(h32);
+				
+				counter++;
+				
+				if (counter == 100000)
+				{
+					break;
+				}
+				
+			}
+			
+        };
+    </script>
+</body>
+</html>
