@@ -757,12 +757,15 @@ dic["dictionaryKey3"] = "value3"
 
 print(dic.items())
 print(dic2.items())
+```
+prints
 
-#prints
-```
-#dict_items([('dictionarykey1', 'value1'), ('dictionaryKey2', 'value2'), ('dictionaryKey3', 'value3')])
-#dict_items([(1, 'valueN1'), (2, 'valueN2')])
-```
+
+
+dict_items([('dictionarykey1', 'value1'), ('dictionaryKey2', 'value2'), ('dictionaryKey3', 'value3')])
+dict_items([(1, 'valueN1'), (2, 'valueN2')])
+
+
 
 Could have also accessed
 
@@ -771,7 +774,7 @@ dic.keys()
 dic.values()
 ```
 
-#id built in function
+#### id built in function
 
 every object has an id, so we can use the id(whatevervariable) tp see if we are referring to the same exact vble or not, by comparing the ids
 
@@ -784,7 +787,7 @@ def thefunc(name, *attributes):
 thefunc("Jay", "is", "a","funny","guy")
 ```
 
-prints - 
+prints
 Jay
 ('is', 'a', 'funny', 'guy')
 
